@@ -113,6 +113,30 @@ export const resourceTemplateLoaded = (state, action) => {
   return newState
 }
 
+export const setLoadedResourceTemplates = (state, action) => {
+  const rtArray = action.payload.rtArray
+  const newState = { ...state }
+
+  rtArray.forEach((rt) => {
+    newState.entities.resourceTemplates[rt.id] = rt
+  })
+
+  return newState
+}
+
+
+// retrievedRTs.map((fulfilledResourceTemplateRequest) => {
+//   // FIXME:  are we potentially fetching templates we already have here?
+//   const joinedRts = [...this.state.nestedResourceTemplates]
+//
+//   joinedRts.push(fulfilledResourceTemplateRequest.response.body)
+//   // Add the resource template into the store
+//   store.dispatch(resourceTemplateLoaded(fulfilledResourceTemplateRequest.response.body))
+//   this.setState({ nestedResourceTemplates: joinedRts })
+// })
+//
+//
+
 export const makeShortID = () => shortid.generate()
 
 const selectorReducer = (state = {}, action) => {
@@ -125,6 +149,8 @@ const selectorReducer = (state = {}, action) => {
       return setBaseURL(state, action)
     case 'SET_LANG':
       return setMyItemsLang(state, action)
+    case 'SET_LOADED_RESOURCE_TEMPLATES':
+      return setLoadedResourceTemplates(state, action)
     case 'RESOURCE_TEMPLATE_LOADED':
       return resourceTemplateLoaded(state, action)
     case 'CHANGE_SELECTIONS':

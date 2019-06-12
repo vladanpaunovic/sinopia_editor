@@ -11,6 +11,7 @@ instance.apiClient.basePath = Config.sinopiaServerBase
 
 const emptyTemplate = { propertyTemplates: [{}] }
 
+// returns a promise
 const getResourceTemplateFromServer = (templateId, group) => {
   // Allow function to be called without second arg
   if (!group) group = Config.defaultSinopiaGroupId
@@ -24,6 +25,7 @@ const getResourceTemplateFromServer = (templateId, group) => {
   return instance.getResourceWithHttpInfo(group, templateId, { accept: 'application/json' })
 }
 
+// returns a promise
 export const getResourceTemplate = (templateId, group) => {
   if (Config.spoofSinopiaServer) return spoofedGetResourceTemplate(templateId)
 

@@ -50,6 +50,11 @@ export const resourceTemplateLoaded = resourceTemplate => ({
   payload: resourceTemplate,
 })
 
+export const setLoadedResourceTemplates = resourceTemplateArray => ({
+  type: 'SET_LOADED_RESOURCE_TEMPLATES',
+  payload: resourceTemplateArray,
+})
+
 export const authenticationFailure = authenticationResult => ({
   type: 'AUTHENTICATION_FAILURE',
   payload: authenticationResult,

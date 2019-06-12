@@ -7,7 +7,7 @@ import shortid from 'shortid'
 import PropertyPanel from './property/PropertyPanel'
 import PropertyResourceTemplate from './property/PropertyResourceTemplate'
 import PropertyComponent from './property/PropertyComponent'
-import { removeAllContent, setItems, resourceTemplateLoaded } from '../../actions/index'
+import { removeAllContent, setItems, resourceTemplateLoaded, setLoadedResourceTemplates } from '../../actions/index'
 import { getResourceTemplate } from '../../sinopiaServer'
 import { isResourceWithValueTemplateRef, resourceToName } from '../../Utilities'
 import store from '../../store'
@@ -21,7 +21,7 @@ export class ResourceTemplateForm extends Component {
     this.defaultValues()
     this.state = {
       inputs: {},
-      nestedResourceTemplates: [],
+      // nestedResourceTemplates: [],
       ptRtIds: [],
       templateError: false,
       templateErrors: [],
@@ -32,20 +32,34 @@ export class ResourceTemplateForm extends Component {
     this.fulfillRTPromises(this.resourceTemplatePromise(this.joinedRTs()))
   }
 
+  // for each fulfillled RT retrieval promise,
+  //  - adding retrieved RT onto "nestedResourceTemplates" array in state
+  //  - tell redux the particular resource template is loaded
   fulfillRTPromises = async (promiseAll) => {
-    await promiseAll.then(async (rts) => {
-      rts.map((fulfilledResourceTemplateRequest) => {
-        const joinedRts = [...this.state.nestedResourceTemplates]
-
-        joinedRts.push(fulfilledResourceTemplateRequest.response.body)
-        // Add the resource template into the store
-        store.dispatch(resourceTemplateLoaded(fulfilledResourceTemplateRequest.response.body))
-        this.setState({ nestedResourceTemplates: joinedRts })
+    await promiseAll.then(async (fulfillledRTRequest) => {
+      fulfillledRTRequest.forEach((rt) => {
+        store.dispatch(resourceTemplateLoaded(rt.response.body))
       })
+      // store.dispatch(setLoadedResourceTemplates(retrievedRTs))
+      // store.dispatch(setLoadedResourceTemplates(fulfillledRTRequest.map(rt => rt.response.body)))
     }).catch((err) => {
       this.setState({ templateError: err })
     })
   }
+
+    // await promiseAll.then(async (retrievedRTs) => {
+    //   retrievedRTs.map((fulfilledResourceTemplateRequest) => {
+    //     // FIXME:  are we potentially fetching templates we already have here?
+    //     const joinedRts = [...this.state.nestedResourceTemplates]
+    //
+    //     joinedRts.push(fulfilledResourceTemplateRequest.response.body)
+    //     // Add the resource template into the store
+    //     store.dispatch(resourceTemplateLoaded(fulfilledResourceTemplateRequest.response.body))
+    //     this.setState({ nestedResourceTemplates: joinedRts })
+    //   })
+    // }).catch((err) => {
+    //   this.setState({ templateError: err })
+    // })
 
   resourceTemplateFields = (rtIds, property) => {
     const rtProperties = []
@@ -74,13 +88,31 @@ export class ResourceTemplateForm extends Component {
     return rtProperties
   }
 
-  resourceTemplatePromise = async templateRefs => Promise.all(templateRefs.map(rtId => getResourceTemplate(rtId).catch((err) => {
-    const joinedErrorUrls = [...this.state.templateErrors]
+  // templateRefs is an array of rt ids
+  //
+  // returns a single promise:
+  //   reject result if any of the desired rtIds gets a reject from getResourceTemplate
+  //   resolves if ALL resource templates are retrieved from Sinopia Server (or from spoofing)
+  resourceTemplatePromise = async (templateRefs) => Promise.all(rtRetrievalPromiseArray(templateRefs))
+    // templateRefs.map(rtId => getResourceTemplate(rtId).catch((err) => {
+    // const joinedErrorUrls = [...this.state.templateErrors]
+    //
+    // joinedErrorUrls.push(decodeURIComponent(resourceToName(err.url)))
+    // this.setState({ templateErrors: _.sortedUniq(joinedErrorUrls) })
+  // )))
 
-    joinedErrorUrls.push(decodeURIComponent(resourceToName(err.url)))
-    this.setState({ templateErrors: _.sortedUniq(joinedErrorUrls) })
-  })))
+  // returns array of individual promises for retrieving each resourceTemplate from templateRefs
+  rtRetrievalPromiseArray = async (templateRefs) => {
+    return templateRefs.map(rtId => getResourceTemplate(rtId)
+                                      .catch((err) => {
+                                        const joinedErrorUrls = [...this.state.templateErrors]
 
+                                        joinedErrorUrls.push(decodeURIComponent(resourceToName(err.url)))
+                                        this.setState({ templateErrors: _.sortedUniq(joinedErrorUrls) })
+                                      }))
+  }
+
+  // returns an array of resource template ids from the valueTemplateRefs values in the propertyTemplates
   joinedRTs = () => {
     let joined = []
 
@@ -101,7 +133,12 @@ export class ResourceTemplateForm extends Component {
     })
   }
 
-  rtForPt = rtId => _.find(this.state.nestedResourceTemplates, ['id', rtId])
+  // TODO: replace this with fetch from redux state
+  // rtForPt = rtId => _.find(this.state.nestedResourceTemplates, ['id', rtId])
+
+  rtForPt = (rtId) => {
+    if (this.props.resourceTemplateMap) return this.props.resourceTemplateMap[rtId]
+  }
 
   renderComponentForm = () => (
     <div>
@@ -159,11 +196,13 @@ ResourceTemplateForm.propTypes = {
   handleMyItemsChange: PropTypes.func,
   handleRemoveAllContent: PropTypes.func,
   displayValidations: PropTypes.bool,
+  resourceTemplateMap: PropTypes.object,
 }
 
 const mapStateToProps = state => ({
   literals: state.literal,
   lookups: state.lookups,
+  resourceTemplateMap: state.selectorReducer.entities.resourceTemplates
 })
 
 const mapDispatchToProps = dispatch => ({
