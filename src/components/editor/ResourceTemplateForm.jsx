@@ -36,9 +36,9 @@ export class ResourceTemplateForm extends Component {
   //  - adding retrieved RT onto "nestedResourceTemplates" array in state
   //  - tell redux the particular resource template is loaded
   fulfillRTPromises = async (promiseAll) => {
-    await promiseAll.then(async (fulfillledRTRequest) => {
-      fulfillledRTRequest.forEach((rt) => {
-        store.dispatch(resourceTemplateLoaded(rt.response.body))
+    await promiseAll.then(async (fulfillledRTRequests) => {
+      fulfillledRTRequests.forEach((rtreq) => {
+        store.dispatch(resourceTemplateLoaded(rtreq.response.body))
       })
       // store.dispatch(setLoadedResourceTemplates(retrievedRTs))
       // store.dispatch(setLoadedResourceTemplates(fulfillledRTRequest.map(rt => rt.response.body)))
