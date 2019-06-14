@@ -38,10 +38,6 @@ class Editor extends Component {
     }
   }
 
-  handleRdfSave = () => {
-    this.props.openGroupChooser()
-  }
-
   renderResourceTemplate = () => (
     <ResourceTemplate resourceTemplateId = {this.state.resourceTemplateId} />
   )
@@ -95,7 +91,7 @@ class Editor extends Component {
             <button type="button" className="btn btn-primary btn-sm btn-editor" onClick={ this.props.validate }>Validate</button>
           </section>
         </div>
-        <RDFModal save={ this.handleRdfSave } close={ this.props.closeRdfPreview } />
+        <RDFModal save={ this.props.openGroupChooser } close={ this.props.closeRdfPreview } />
         {errorMessage}
         <div>
           <GroupChoiceModal close={ this.closeGroupChooser }
