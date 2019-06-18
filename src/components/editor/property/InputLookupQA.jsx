@@ -80,9 +80,10 @@ class InputLookupQA extends Component {
       }
 
       body.forEach((innerResult) => {
+        let itemContext = this.renderContext(innerResult, authLabel)
         items.push(
           <MenuItem option={innerResult} position={menuItemIndex} key={menuItemIndex}>
-            {innerResult.label}
+            {itemContext}
           </MenuItem>,
         )
         menuItemIndex++
@@ -94,6 +95,15 @@ class InputLookupQA extends Component {
         {items}
       </Menu>
     )
+  }
+
+  renderContext = ( innerResult, authLabel ) => {
+      switch (authLabel) {
+        case 'Discogs':
+          return buildDiscogsContext(innerResult)
+        default:
+          return innerResult.label
+      }
   }
 
   render() {
@@ -133,6 +143,23 @@ class InputLookupQA extends Component {
                               language = lookupConfig.language
 
                               /*
+                               *  There are two types of lookup: linked data and non-linked data. The API calls
+                               *  for each type are different, so check the nonldLookup field in the lookup config. 
+                               *  If the field is not set, assume false. 
+                               */
+                              const nonldLookup = lookupConfig.nonldLookup ? lookupConfig.nonldLookup : false
+
+                              // default the API calls to their linked data values
+                              let subAuthCall = 'GET_searchSubauthority'
+                              let authorityCall = 'GET_searchAuthority'                              
+                              
+                              // Change the API calls if this is a non-linked data lookup
+                              if ( nonldLookup ) {
+                                  subAuthCall = 'GET_nonldSearchWithSubauthority'
+                                  authorityCall = 'GET_nonldSearchAuthority'
+                              }
+                              
+                              /*
                                *return the 'promise'
                                *Since we don't want promise.all to fail if
                                *one of the lookups fails, we want a catch statement
@@ -140,8 +167,7 @@ class InputLookupQA extends Component {
                                *The only difference between this call and the next one is the call to Get_searchSubauthority instead of
                                *Get_searchauthority.  Passing API call in a variable name/dynamically, thanks @mjgiarlo
                                */
-                              const actionFunction = lookupConfig.subauthority ? 'GET_searchSubauthority' : 'GET_searchAuthority'
-
+                              const actionFunction = lookupConfig.subauthority ? subAuthCall : authorityCall
                               return client
                                 .apis
                                 .SearchQuery?.[actionFunction]({
@@ -208,6 +234,62 @@ InputLookupQA.propTypes = {
     }),
   }).isRequired,
   reduxPath: PropTypes.oneOfType([PropTypes.string, PropTypes.array]),
+}
+
+const buildDiscogsContext = (innerResult) => {
+    let url = innerResult.uri;
+	let context = innerResult.context;
+	let image_url = context["Image URL"][0];
+	let year = "";
+	if ( context["Year"][0].length > 0 ) {
+		year = "(" + context["Year"][0] + ")";
+	}
+	let rec_label = context["Record Labels"][0];
+	let formats = context["Formats"].toString();
+	let discogs_type = context["Type"][0];
+	let target = "_blank";
+	let type = context["Type"][0].charAt(0).toUpperCase() + context["Type"][0].slice(1);
+	let row = "row"
+	let colTwo = "col-md-2"
+	let colTen = "col-md-10"
+	return (
+		<div className={row} style={discogsContainer}>
+			<div className={colTwo} style={imageContainer}>
+				<img style={discogsImageStyle} src={image_url}/><br />
+			</div>
+			<div className={colTen} style={detailsContainer}>
+				{innerResult.label} {year}<br />
+				<b>Format: </b>{formats}<br />
+				<b>Label: </b>{rec_label}<span style={typeSpan}><b>Type: </b>{type}</span>
+			</div>
+		</div>
+	)
+}
+
+const discogsContainer = {
+	padding: '0 0 4px 3px',
+}
+
+const detailsContainer = {
+	padding: '0 0 0 8px',
+	whiteSpace: 'normal'
+}
+
+const imageContainer = {
+	width: '50px',
+	overflow: 'hidden',
+	padding: '3px 0 0',
+	textAlign: 'center'
+}
+
+const discogsImageStyle = {
+	width: '100%',
+	marginRight: '10px',
+	verticalAlign: 'top',
+}
+
+const typeSpan = {
+	paddingLeft: '8px'
 }
 
 const mapStateToProps = (state, props) => {

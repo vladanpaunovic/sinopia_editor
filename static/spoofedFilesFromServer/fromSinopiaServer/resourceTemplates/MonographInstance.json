@@ -236,6 +236,20 @@
       },
       "mandatory": "false",
       "repeatable": "true"
+    },
+    {
+        "mandatory": "false",
+        "repeatable": "false",
+        "type": "lookup",
+        "resourceTemplates": [],
+        "valueConstraint": {
+            "valueTemplateRefs": [],
+            "useValuesFrom": ["urn:discogs"],
+            "valueDataType": {"dataTypeURI": "http://id.loc.gov/ontologies/bibframe/Work"},
+            "defaults": []
+        },
+        "propertyURI": "http://id.loc.gov/ontologies/bibframe/Work",
+        "propertyLabel": "Discogs Lookup"
     }
   ]
 }
