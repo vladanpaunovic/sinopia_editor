@@ -5,6 +5,7 @@ import React from 'react'
 import { mount, shallow } from 'enzyme'
 import SinopiaResourceTemplates from 'components/templates/SinopiaResourceTemplates'
 import { getEntityTagFromGroupContainer, getResourceTemplate, listResourcesInGroupContainer } from 'sinopiaServer'
+import { getFixtureResourceTemplate, listFixtureResourcesInGroupContainer } from '../../fixtureLoaderHelper'
 
 jest.mock('sinopiaServer')
 
@@ -188,14 +189,60 @@ describe('<SinopiaResourceTemplates />', () => {
   describe('display', () => {
     const renderRoutes = () => mount(<SinopiaResourceTemplates messages={[]}/>)
 
+    beforeAll(() => {
+      getEntityTagFromGroupContainer.mockImplementation(async () => 'foobar')
+      // getEntityTagFromGroupContainer.mockReturnValue(new Promise((resolve) => { resolve('FOOBAR!') }))
+    })
+
+    beforeEach(() => {
+      // getEntityTagFromGroupContainer.mockImplementation(async () => 'foobar')
+      getEntityTagFromGroupContainer.mockReturnValue(new Promise((resolve) => { resolve('FOOBAR!') }))
+    })
+
+    describe('when there is an error connecting to server', () => {
+      it('renders an error message if there is no connection to the server', () => {
+        expect.assertions(1)
+        listResourcesInGroupContainer.mockImplementation(async () => {
+          throw 'uh oh!'
+        })
+        // listResourcesInGroupContainer.mockReturnValue(new Promise((_, reject) => { reject(Error('uh oh!')) }))
+
+        const component = renderRoutes()
+        console.info(`component.text()=${component.text()}`)
+        const errMsg = 'No connection to the Sinopia Server is available, or there are no resources for any group.'
+        expect(component.find('div.alert').text()).toEqual(errMsg)
+      })
+    })
+
     it('renders the table of resource templates with name, id, author, and guiding statement columns', () => {
       expect.assertions(1)
+
+      listResourcesInGroupContainer.mockImplementation(async group => listFixtureResourcesInGroupContainer(group))
+      getResourceTemplate.mockImplementation(async templateId => getFixtureResourceTemplate(templateId))
 
       const component = renderRoutes()
       const tableHeaderCellText = component.find('table#resource-template-list th').map(thWrapper => thWrapper.text())
       expect(tableHeaderCellText).toEqual(['Template name', 'ID', 'Author', 'Guiding statement'])
     })
 
+    it('renders the table rows with the expected data', () => {
+      expect.assertions(3)
+
+      listResourcesInGroupContainer.mockImplementation(async group => listFixtureResourcesInGroupContainer(group))
+      getResourceTemplate.mockImplementation(async templateId => getFixtureResourceTemplate(templateId))
+
+      const component = renderRoutes()
+      const tableRowData = component.find('table#resource-template-list tbody tr')
+        .map(trWrapper => trWrapper.find('td').map(tdWrapper => tdWrapper.text()))
+      console.info(`component.text()=${component.text()}`)
+      console.info(`tableRowData=${tableRowData}`)
+
+      expect(tableRowData).toContain(['Barcode', 'resourceTemplate:bf2:Identifiers:Barcode', '', ''])
+      expect(tableRowData).toContain(['RT RDA Manifestation for monographs', 'rt:rda:manifestation:monograph', 'Crystal Clements (cec23@uw.edu)', ''])
+      expect(tableRowData).toContain(['Instance Title', 'resourceTemplate:bf2:Title', '', 'Title information relating to a resource: work title, preferred title, instance title, transcribed title, translated title, variant form of title, etc.'])
+    })
+
+    // TODO: we should also be resetting mocks, here and where ever else we're overriding behavior
     afterAll(() => {
       renderRoutes.unmount()
     })
