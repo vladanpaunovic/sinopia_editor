@@ -1,15 +1,5 @@
 FROM circleci/node:10.11
 
-# Allow build-time arguments (for, e.g., docker-compose)
-ARG USE_FIXTURES
-ARG TRELLIS_BASE_URL
-ARG DEFAULT_PROFILE_SCHEMA_VERSION
-ARG SINOPIA_GROUP
-ARG SINOPIA_URI
-ARG AWS_COGNITO_DOMAIN
-ARG COGNITO_CLIENT_ID
-ARG COGNITO_USER_POOL_ID
-
 # This is the directory the user in the circleci/node image can write to
 WORKDIR /home/circleci
 
