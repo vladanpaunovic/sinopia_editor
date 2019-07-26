@@ -10,6 +10,7 @@ ARG AWS_COGNITO_DOMAIN
 ARG COGNITO_CLIENT_ID
 ARG COGNITO_USER_POOL_ID
 ARG SEARCH_HOST
+ARG INDEX_URL
 
 # This is the directory the user in the circleci/node image can write to
 WORKDIR /home/circleci
