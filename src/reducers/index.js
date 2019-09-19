@@ -9,7 +9,7 @@ import {
 import {
   setResourceTemplate, clearResourceTemplates, setResourceTemplateSummary,
   loadingLanguages, languagesReceived,
-  loadingQaResults, qaResultsReceived,
+  loadingQaResults, qaResultsReceived, loadedResourceTemplateSummaries,
 } from './entities'
 import setSearchResults from './search'
 import { findObjectAtPath } from 'selectors/resourceSelectors'
@@ -164,6 +164,7 @@ const handlers = {
   LOADING_LANGUAGES: loadingLanguages,
   UPDATE_FINISHED: updateFinished,
   SET_LAST_SAVE_CHECKSUM: setLastSaveChecksum,
+  LOADED_RESOURCE_TEMPLATE_SUMMARIES: loadedResourceTemplateSummaries,
 }
 
 export const createReducer = handlers => (state = {}, action) => {

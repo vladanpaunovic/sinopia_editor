@@ -8,3 +8,7 @@ export const languagesReceived = json => ({
   type: 'LANGUAGES_RECEIVED',
   payload: json,
 })
+
+export const loadedResourceTemplateSummaries = () => ({
+  type: 'LOADED_RESOURCE_TEMPLATE_SUMMARIES',
+})

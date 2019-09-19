@@ -64,7 +64,7 @@ describe('fetchResourceTemplateSummaries', () => {
     expect(server.getResourceTemplate).toHaveBeenCalledWith(noteId, 'ld4p')
     expect(server.getResourceTemplate).toHaveBeenCalledWith(barcodeId, 'ld4p')
 
-    expect(dispatch).toHaveBeenCalledTimes(2)
+    expect(dispatch).toHaveBeenCalledTimes(3)
     expect(dispatch).toBeCalledWith({
       type: 'SET_RESOURCE_TEMPLATE_SUMMARY',
       payload: {
@@ -75,6 +75,10 @@ describe('fetchResourceTemplateSummaries', () => {
         author: undefined,
         remark: undefined,
       },
+    })
+
+    expect(dispatch).toBeCalledWith({
+      type: 'LOADED_RESOURCE_TEMPLATE_SUMMARIES',
     })
   })
   it('handles no templates', async () => {
@@ -92,6 +96,9 @@ describe('fetchResourceTemplateSummaries', () => {
     await fetchResourceTemplateSummaries()(dispatch)
     expect(server.listResourcesInGroupContainer).toHaveBeenCalledTimes(1)
     expect(server.listResourcesInGroupContainer).toHaveBeenCalledWith('ld4p')
-    expect(dispatch).toHaveBeenCalledTimes(0)
+    expect(dispatch).toHaveBeenCalledTimes(1)
+    expect(dispatch).toBeCalledWith({
+      type: 'LOADED_RESOURCE_TEMPLATE_SUMMARIES',
+    })
   })
 })

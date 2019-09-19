@@ -40,9 +40,13 @@ class SinopiaResourceTemplates extends Component {
   downloadLinkFormatter = (cell, row) => (<Download resourceTemplateId={ row.id } groupName={ row.group } />)
 
   render() {
+    if (this.props.resourceTemplateSummaries === undefined) {
+      return null
+    }
+
     if (this.props.resourceTemplateSummaries.length === 0) {
       return (
-        <div className="alert alert-warning alert-dismissible">
+        <div className="alert alert-warning alert-dismissible" id="resource-template-list">
           <button className="close" data-dismiss="alert" aria-label="close">&times;</button>
           No connection to the Sinopia Server is available, or there are no resources for any group.
         </div>
@@ -132,7 +136,8 @@ SinopiaResourceTemplates.propTypes = {
 }
 
 const mapStateToProps = (state) => {
-  const resourceTemplateSummaries = Object.values(state.selectorReducer.entities.resourceTemplateSummaries)
+  const resourceTemplateSummariesState = state.selectorReducer.entities.resourceTemplateSummaries
+  const resourceTemplateSummaries = resourceTemplateSummariesState ? Object.values(state.selectorReducer.entities.resourceTemplateSummaries) : undefined
   const resource = rootResource(state)
   const error = state.selectorReducer.editor.serverError
   return {
