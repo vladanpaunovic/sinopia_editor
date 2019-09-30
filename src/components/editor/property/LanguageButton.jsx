@@ -4,8 +4,6 @@ import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import Modal from 'react-bootstrap/lib/Modal'
-import Button from 'react-bootstrap/lib/Button'
 import InputLang from './InputLang'
 import { languageSelected } from 'actions/index'
 import { findNode } from 'selectors/resourceSelectors'
@@ -25,30 +23,32 @@ const LanguageButton = (props) => {
   }
 
   const dispModal = () => (
-    <Modal show={true} onHide={(handleClose)}>
-      <Modal.Header closeButton>
-        <Modal.Title>Languages</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
-        <InputLang reduxPath={props.reduxPath} handleLangChange={setLang}/>
-      </Modal.Body>
-      <Modal.Footer>
-        <Button onClick={handleLangSubmit}>Submit</Button>
-        <Button onClick={handleClose}>Close</Button>
-      </Modal.Footer>
-    </Modal>
+    <div className="modal fade" data-show={true} onHide={(handleClose)}>
+      <div className="modal-dialog" role="document">
+        <div className="modal-content">
+          <div className="modal-header">
+            <h4 className="modal-title">Languages</h4>
+         </div>
+         <div className="modal-body">
+          <InputLang reduxPath={props.reduxPath} handleLangChange={setLang}/>
+        </div>
+        <div className="modal-footer">
+          <button className="btn btn-default" onClick={handleLangSubmit}>Submit</button>
+          <button className="btn btn-default" onClick={handleClose}>Close</button>
+        </div>
+      </div>
+    </div>
+   </div>
   )
 
   return (
     <React.Fragment>
-      <Button
+      <button
         id="language"
-        bsSize="small"
-        bsStyle="default"
         onClick = { () => setShow(true) }
-        className="btn-literal">
+        className="btn btn-sm btn-default btn-literal">
         Language: {props.language}
-      </Button>
+      </button>
       { show ? dispModal() : '' }
     </React.Fragment>
   )

@@ -11,7 +11,6 @@ import {
 import { clearRetrieveResourceError as clearRetrieveResourceErrorAction, clearSearchResults as clearSearchResultsAction } from 'actions/index'
 import SinopiaSearchResults from './SinopiaSearchResults'
 import QASearchResults from './QASearchResults'
-import SearchResultsPaging from './SearchResultsPaging'
 import SearchResultsMessage from './SearchResultsMessage'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
@@ -59,7 +58,26 @@ const Search = (props) => {
     }
   }
 
+<<<<<<< HEAD
   const options = searchConfig.map(config => (<option key={config.uri} value={config.uri}>{config.label}</option>))
+=======
+  let alert
+
+  if (showAlert) {
+    alert = (
+      <div className="alert alert-warning" key="0">
+        <button className="close" aria-label="close" onClick={() => setShowAlert(false)}>&times;</button>
+        {props.error.message}
+      </div>
+    )
+  }
+
+  useEffect(() => {
+    setShowAlert(props.error)
+  }, [props.error])
+
+  const options = searchConfig.map(config => (<option key={config.authority} value={config.authority}>{config.label}</option>))
+>>>>>>> Removing bootstrap specific React modules, replacing with HTML attributes and css classes from Bootstrap 4
 
   let results
   if (searchUri === 'sinopia') {

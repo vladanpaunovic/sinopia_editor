@@ -5,9 +5,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import Config from 'Config'
-import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
-import Pagination from 'react-bootstrap/lib/Pagination'
-import { fetchSinopiaSearchResults } from 'actionCreators/search'
+import fetchSearchResults from 'actionCreators/search'
 
 const SearchResultsPaging = (props) => {
   const [currentPage, setCurrentPage] = useState(1) // initialize currentPage to 1
@@ -63,13 +61,21 @@ const SearchResultsPaging = (props) => {
     <div id="search-results-pages" className="row">
       <div className="col-sm-2"></div>
       <div className="col-sm-8 text-center">
-        <Pagination size="lg" onClick={handleClick}>
-          <Pagination.First disabled={(currentPage === 1)} />
-          <Pagination.Prev disabled={currentPage === 1} />
+        <ul className="pagination pagination-lg" onClick={handleClick}>
+          <li className="page-item" disabled={(currentPage === 1)}>
+            «
+          </li>
+          <li className="page-item" disabled={currentPage === 1}>
+            ‹
+          </li>
           {pageButtons()}
-          <Pagination.Next disabled={currentPage === lastPage()} />
-          <Pagination.Last disabled={currentPage === lastPage()} />
-        </Pagination>
+          <li className="page-item" disabled={currentPage === lastPage()}>
+            ›
+          </li>
+          <li className="page-item"  disabled={currentPage === lastPage()}>
+            »
+          </li>
+        </ul>
       </div>
       <div className="col-sm-2"></div>
     </div>

@@ -3,7 +3,6 @@
 import React from 'react'
 import { shallow } from 'enzyme'
 import PropertyLabelInfoTooltip from 'components/editor/property/PropertyLabelInfoTooltip'
-import { OverlayTrigger } from 'react-bootstrap'
 import { faInfoCircle } from '@fortawesome/free-solid-svg-icons'
 
 
