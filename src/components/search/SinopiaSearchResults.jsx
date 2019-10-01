@@ -34,10 +34,10 @@ const SinopiaSearchResults = (props) => {
     return (
       <tr>
         <td>
-           { rowIndex }
+          { rowIndex }
         </td>
         <td>
-          <a href='{ link }'>{ row.title }</a>
+          <a href="{ link }">{ row.title }</a>
         </td>
       </tr>
     )
@@ -82,7 +82,7 @@ const SinopiaSearchResults = (props) => {
             </th>
           </thead>
           <tbody>
-           { props.searchResults.forEach((row, _index) => generateTableRow(row, _index)) }
+            { props.searchResults.forEach((row, _index) => generateTableRow(row, _index)) }
           </tbody>
         </table>
 >>>>>>> Removing bootstrap specific React modules, replacing with HTML attributes and css classes from Bootstrap 4

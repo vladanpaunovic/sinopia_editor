@@ -9,12 +9,9 @@ import { showRdfPreview } from 'actions/index'
 import SaveAndPublishButton from './SaveAndPublishButton'
 
 const RDFModal = (props) => {
-  if (!props.show) {
-    return null
-  }
 
-  return (<div>
-    <div className="modal fade" data-show={true} role="dialog" onHide={() => props.showRdfPreview(false)}>
+  return (
+    <div className="modal fade" id="rdf-modal" tabIndex="-1" role="dialog">
       <div className="modal-dialog modal-lg">
         <div className="modal-content">
           <div className="modal-header">
@@ -34,8 +31,7 @@ const RDFModal = (props) => {
           </div>
         </div>
       </div>
-    </div>
-  </div>)
+    </div>)
 }
 
 RDFModal.propTypes = {

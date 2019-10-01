@@ -54,7 +54,7 @@ const SearchResultsPaging = (props) => {
   }
 
   const lastPage = () => Math.ceil(props.totalResults / Config.searchResultsPerPage)
-  const pageButton = (key, active) => <Pagination.Item key={ key } active={ active }>{key}</Pagination.Item>
+  const pageButton = (key, active) => <li key={ key } active={ active }>{key}</li>
   const pageButtons = () => Array.from({ length: lastPage() }, (_, index) => pageButton(index + 1, index + 1 === currentPage))
 
   return (
@@ -72,7 +72,7 @@ const SearchResultsPaging = (props) => {
           <li className="page-item" disabled={currentPage === lastPage()}>
             ›
           </li>
-          <li className="page-item"  disabled={currentPage === lastPage()}>
+          <li className="page-item" disabled={currentPage === lastPage()}>
             »
           </li>
         </ul>

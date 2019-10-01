@@ -24,8 +24,8 @@ const SaveAndPublishButton = (props) => {
       Save
 =======
     <button id={ props.id }
-      className="btn btn-primary btn-small"
-      onClick={ save } disabled={ props.isDisabled }>
+            className="btn btn-primary btn-small"
+            onClick={ save } disabled={ props.isDisabled }>
       Save & Publish
 >>>>>>> Removing bootstrap specific React modules, replacing with HTML attributes and css classes from Bootstrap 4
     </button>

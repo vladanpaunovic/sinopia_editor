@@ -30,7 +30,7 @@ const InputValue = (props) => {
     <button
       id="editItem"
       onClick={handleEditClick}
-      className="btn btn-sm btn-literal btn-default">
+      className="btn btn-sm btn-secondary btn-default">
       Edit
     </button>
     { isLiteral ? (<LanguageButton reduxPath={props.reduxPath}/>) : '' }

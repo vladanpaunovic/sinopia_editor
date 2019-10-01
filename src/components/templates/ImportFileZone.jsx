@@ -196,8 +196,8 @@ class ImportFileZone extends Component {
 
     const alerts = this.state.messages.map((message, idx) => (
       <div key={ idx }
-        className="alert alert-warning alert-dismissible"
-        onClose={() => this.removeMessage(message)}>
+           className="alert alert-warning alert-dismissible"
+           onClose={() => this.removeMessage(message)}>
         <button className="close" data-dismiss="alert" aria-label="close">&times;</button>
         { message }
       </div>

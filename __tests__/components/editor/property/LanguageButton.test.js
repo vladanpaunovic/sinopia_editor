@@ -23,7 +23,7 @@ describe('<LanguageButton />', () => {
   })
 
   it('item appears when user inputs text into the field', () => {
-    expect(mockWrapper.find('Button#language').childAt(1).text()).toEqual('English')
+    expect(mockWrapper.find('button#language').childAt(1).text()).toEqual('English')
   })
 })
 
@@ -42,29 +42,29 @@ describe('When the user enters input into language modal', () => {
                                             languageSelected={mockMyItemsLangChange} />)
 
   it('shows the <InputLang> modal when the <Button/> is clicked', () => {
-    mockWrapper.find('Button').first().simulate('click')
-    expect(mockWrapper.find('Modal').prop('show')).toEqual(true)
-    expect(mockWrapper.find('ModalTitle').render().text()).toEqual('Languages')
+    mockWrapper.find('button').first().simulate('click')
+    expect(mockWrapper.find('div.modal').prop('data-show')).toEqual(true)
+    expect(mockWrapper.find('h4.modal-title').render().text()).toEqual('Languages')
   })
 
   it('calls handleLangSubmit when submit is clicked', () => {
-    mockWrapper.find('Button').first().simulate('click')
-    expect(mockWrapper.find('Modal').prop('show')).toEqual(true)
-    expect(mockWrapper.find('Modal').length).toEqual(1)
-    mockWrapper.find('ModalFooter').find('Button').first().simulate('click')
+    mockWrapper.find('button').first().simulate('click')
+    expect(mockWrapper.find('div.modal').prop('data-show')).toEqual(true)
+    expect(mockWrapper.find('div.modal').length).toEqual(1)
+    mockWrapper.find('div.modal-footer').find('button').first().simulate('click')
     expect(mockMyItemsLangChange.mock.calls.length).toEqual(1)
-    expect(mockWrapper.find('Modal').length).toEqual(0)
+    expect(mockWrapper.find('div.modal').length).toEqual(0)
 
 
     mockMyItemsLangChange.mock.calls = []
   })
 
   it('closes modal when close is clicked', () => {
-    mockWrapper.find('Button').first().simulate('click')
-    expect(mockWrapper.find('Modal').prop('show')).toEqual(true)
-    mockWrapper.find('ModalFooter').find('Button').last().simulate('click')
+    mockWrapper.find('button').first().simulate('click')
+    expect(mockWrapper.find('div.modal').prop('data-show')).toEqual(true)
+    mockWrapper.find('div.modal-footer').find('button').last().simulate('click')
     expect(mockMyItemsLangChange.mock.calls.length).toEqual(0)
-    expect(mockWrapper.find('Modal').length).toEqual(0)
+    expect(mockWrapper.find('div.modal').length).toEqual(0)
 
     mockMyItemsLangChange.mock.calls = []
   })

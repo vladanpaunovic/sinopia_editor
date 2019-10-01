@@ -31,13 +31,13 @@ const GroupChoiceModal = (props) => {
     <div>
       <div className="modal modal-lg"
            role="dialog"
-           tabindex="-1"
+           tabIndex="-1"
            show={ props.show }
            onHide={ () => props.closeGroupChooser(false) }>
         <div className="modal-dialog" role="document">
           <div className="modal-content">
             <div className="modal-header prop-heading" closeButton>
-              <h4 class="modal-title">
+              <h4 className="modal-title">
                 Which group do you want to save to?
               </h4>
               <button type="button" className="close" data-dismiss="modal" aria-label="Close">
@@ -50,20 +50,20 @@ const GroupChoiceModal = (props) => {
               </div>
               <div>
                 <form className="group-select-options" >
-                <select defaultValue={ selectedValue } onBlur={ event => updateSelectedValue(event)} >
-                  { groups.map((group, index) => <option key={index} value={ group[0] }>{ group[1] }</option>) }
-                </select>
-                <div className="group-choose-buttons">
-                  <button className="btn btn-link btn-sm" style={{ paddingRight: '20px' }}
-                    onClick={ () => props.closeGroupChooser(false) }>
-                    Cancel
-                  </button>
-                  <button className="btn btn-primary btn-sm" onClick={ saveAndClose }>
-                    Save
-                  </button>
-                </div>
-              </form>
-             </div>
+                  <select defaultValue={ selectedValue } onBlur={ event => updateSelectedValue(event)} >
+                    { groups.map((group, index) => <option key={index} value={ group[0] }>{ group[1] }</option>) }
+                  </select>
+                  <div className="group-choose-buttons">
+                    <button className="btn btn-link btn-sm" style={{ paddingRight: '20px' }}
+                            onClick={ () => props.closeGroupChooser(false) }>
+                      Cancel
+                    </button>
+                    <button className="btn btn-primary btn-sm" onClick={ saveAndClose }>
+                      Save
+                    </button>
+                  </div>
+                </form>
+              </div>
             </div>
           </div>
         </div>

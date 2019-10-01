@@ -14,5 +14,4 @@ describe('<RequiredSuperscript />', () => {
   it('uses FontAwesome Asterisk', () => {
     expect(wrapper.find('sup > FontAwesomeIcon[className="asterick text-danger"]')).toBeTruthy()
   })
-
 })

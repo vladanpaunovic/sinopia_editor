@@ -17,7 +17,7 @@ class Header extends Component {
             <h1 className="editor-logo">LINKED DATA EDITOR{`${Config.sinopiaEnv}`}</h1>
           </div>
           <div className="col-4">
-            <ul className="nav  pull-right">
+            <ul className="nav pull-right">
               <li className="nav-item">
                 <a className="nav-link editor-header-text" href={`https://profile-editor.${Config.sinopiaDomainName}/`}>Profile Editor</a>
               </li>
@@ -28,15 +28,15 @@ class Header extends Component {
           </div>
         </div>
         <div>
-            <ul className="nav nav-tabs pull-left editor-navtabs">
-              { /* Navlinks enable highlighting the appropriate tab based on route, active style is defined in css */}
-              <li className="nav-item"><NavLink className="nav-link" to="/search">Search</NavLink></li>
-              <li className="nav-item"><NavLink className="nav-link" to="/templates">Resource Templates</NavLink></li>
-              <li className="nav-item"><NavLink className="nav-link" to="/load">Load RDF</NavLink></li>
-              { this.props.hasResource
-                && <li className="nav-item"><NavLink className="nav-link" to="/editor">Editor</NavLink></li>
-              }
-            </ul>
+          <ul className="nav nav-tabs pull-left editor-navtabs">
+            { /* Navlinks enable highlighting the appropriate tab based on route, active style is defined in css */}
+            <li className="nav-item"><NavLink className="nav-link" to="/search">Search</NavLink></li>
+            <li className="nav-item"><NavLink className="nav-link" to="/templates">Resource Templates</NavLink></li>
+            <li className="nav-item"><NavLink className="nav-link" to="/load">Load RDF</NavLink></li>
+            { this.props.hasResource
+             && <li className="nav-item"><NavLink className="nav-link" to="/editor">Editor</NavLink></li>
+            }
+          </ul>
         </div>
       </div>
     )
