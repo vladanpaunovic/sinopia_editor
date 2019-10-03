@@ -14,20 +14,19 @@ const SaveAndPublishButton = (props) => {
     if (props.isSaved) {
       props.update(props.currentUser)
     } else {
-      props.showGroupChooser(true)
+      // props.showGroupChooser(true)
+      $('#group-choice-modal').modal('hide')
     }
   }
 
   return (
-<<<<<<< HEAD
-    <button id={ props.id } className="btn btn-primary" onClick={ save } disabled={ props.isDisabled }>
-      Save
-=======
     <button id={ props.id }
-            className="btn btn-primary btn-small"
-            onClick={ save } disabled={ props.isDisabled }>
-      Save & Publish
->>>>>>> Removing bootstrap specific React modules, replacing with HTML attributes and css classes from Bootstrap 4
+          className="btn btn-primary"
+          // onClick={ save }
+          data-toggle="modal"
+          data-target="#group-choice-modal"
+          disabled={ props.isDisabled }>
+      Save
     </button>
   )
 }

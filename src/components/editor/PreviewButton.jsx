@@ -10,12 +10,13 @@ const PreviewButton = () => {
   const dispatch = useDispatch()
 
   const handleClick = () => {
-    dispatch(showRdfPreview(true))
+    // dispatch(showRdfPreview(true))
+
   }
 
   return (
     <button type="button" className="btn btn-link"
-            aria-label="Preview RDF" title="Preview RDF" onClick={ handleClick }>
+            aria-label="Preview RDF" title="Preview RDF" data-toggle="modal" data-target="#rdf-modal">
       <FontAwesomeIcon icon={faEye} size="2x" />
     </button>
   )

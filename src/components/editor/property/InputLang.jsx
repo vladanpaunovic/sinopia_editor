@@ -1,10 +1,14 @@
 // Copyright 2019 Stanford University see LICENSE for license
 
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import { Typeahead } from 'react-bootstrap-typeahead'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { findNode } from 'selectors/resourceSelectors'
+import { languageSelected } from 'actions/index'
+import { bindActionCreators } from 'redux'
+import { createPortal } from 'react-dom'
+import _ from 'lodash'
 
 /**
  * Provides the RFC 5646 language tag for a literal element.
@@ -12,25 +16,69 @@ import { findNode } from 'selectors/resourceSelectors'
  * See ISO 639 for the list of registered language codes
  */
 const InputLang = (props) => {
-  const setPayLoad = selected => props.handleLangChange({
-    reduxPath: props.reduxPath,
-    lang: selected[0].id,
-  })
+  const modalRoot = document.getElementById("modal")
+  const el = useRef(document.createElement("div"))
 
-  return (
-    <div>
-      <label htmlFor="langComponent">Select language for {props.textValue}
-        <Typeahead
-          onChange={setPayLoad}
-          isLoading={props.loading}
-          options={props.options}
-          emptyLabel={'retrieving list of languages...'}
-          selectHintOnEnter={true}
-          id={'langComponent'}
-        />
-      </label>
-    </div>
+  useEffect(() => {
+    modalRoot.appendChild(el.current);
+  }, [])
+
+  useEffect(() => {
+    return () => {
+      modalRoot.removeChild(el.current)
+    }
+  }, [])
+  
+  const [lang, setLang] = useState('')
+  const setPayLoad = selected => {
+    if(selected.length == 1) {
+      setLang(selected[0].id)
+    } else {
+      setLang('')
+    }
+  }
+
+  const handleLangSubmit = (event) => {
+    if(! _.isEmpty(lang)) {
+      props.languageSelected({
+        reduxPath: props.reduxPath,
+        lang: lang,
+      })
+    }
+    event.preventDefault()
+  }
+
+  const modal = (
+    <React.Fragment>
+      <div className="modal" id={props.id}>
+        <div className="modal-dialog" role="document">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h4 className="modal-title">Languages</h4>
+            </div>
+            <div className="modal-body">
+              <label htmlFor="langComponent">Select language for {props.textValue}
+                <Typeahead
+                  onChange={setPayLoad}
+                  isLoading={props.loading}
+                  options={props.options}
+                  emptyLabel={'retrieving list of languages...'}
+                  selectHintOnEnter={true}
+                  id={'langComponent'}
+                />
+              </label>
+            </div>
+            <div className="modal-footer">
+              <button className="btn btn-default" data-dismiss="modal" onClick={handleLangSubmit}>Submit</button>
+              <button className="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </React.Fragment>
   )
+  // In theory, you could write a modal wrapper that handled the portalling.
+  return createPortal(modal, el.current)
 }
 
 InputLang.propTypes = {
@@ -39,6 +87,7 @@ InputLang.propTypes = {
   handleLangChange: PropTypes.func,
   options: PropTypes.array,
   loading: PropTypes.bool,
+  id: PropTypes.string.isRequired,
 }
 
 const mapStateToProps = (state, ourProps) => {
@@ -51,4 +100,6 @@ const mapStateToProps = (state, ourProps) => {
   }
 }
 
-export default connect(mapStateToProps, null)(InputLang)
+const mapDispatchToProps = dispatch => bindActionCreators({ languageSelected }, dispatch)
+
+export default connect(mapStateToProps, mapDispatchToProps)(InputLang)

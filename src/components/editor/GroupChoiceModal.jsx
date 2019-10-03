@@ -21,10 +21,13 @@ const GroupChoiceModal = (props) => {
     setSelectedValue(event.target.value)
   }
 
-  const saveAndClose = () => {
+  const saveAndClose = (event) => {
+    event.preventDefault()
     props.publishResource(props.currentUser, selectedValue)
     props.showRdfPreview(false)
-    props.closeGroupChooser(false)
+    // props.closeGroupChooser(false)
+    $('#group-choice-modal').modal('hide')
+
   }
 
   return (
@@ -32,11 +35,10 @@ const GroupChoiceModal = (props) => {
       <div className="modal modal-lg"
            role="dialog"
            tabIndex="-1"
-           show={ props.show }
-           onHide={ () => props.closeGroupChooser(false) }>
-        <div className="modal-dialog" role="document">
+           id="group-choice-modal">
+        <div className="modal-dialog modal-lg" role="document">
           <div className="modal-content">
-            <div className="modal-header prop-heading" closeButton>
+            <div className="modal-header prop-heading">
               <h4 className="modal-title">
                 Which group do you want to save to?
               </h4>
@@ -50,12 +52,12 @@ const GroupChoiceModal = (props) => {
               </div>
               <div>
                 <form className="group-select-options" >
-                  <select defaultValue={ selectedValue } onBlur={ event => updateSelectedValue(event)} >
+                  <select className="form-control" defaultValue={ selectedValue } onBlur={ event => updateSelectedValue(event)} >
                     { groups.map((group, index) => <option key={index} value={ group[0] }>{ group[1] }</option>) }
                   </select>
                   <div className="group-choose-buttons">
                     <button className="btn btn-link btn-sm" style={{ paddingRight: '20px' }}
-                            onClick={ () => props.closeGroupChooser(false) }>
+                      data-dismiss="modal">
                       Cancel
                     </button>
                     <button className="btn btn-primary btn-sm" onClick={ saveAndClose }>

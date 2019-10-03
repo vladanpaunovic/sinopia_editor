@@ -58,9 +58,6 @@ const Search = (props) => {
     }
   }
 
-<<<<<<< HEAD
-  const options = searchConfig.map(config => (<option key={config.uri} value={config.uri}>{config.label}</option>))
-=======
   let alert
 
   if (showAlert) {
@@ -77,7 +74,6 @@ const Search = (props) => {
   }, [props.error])
 
   const options = searchConfig.map(config => (<option key={config.authority} value={config.authority}>{config.label}</option>))
->>>>>>> Removing bootstrap specific React modules, replacing with HTML attributes and css classes from Bootstrap 4
 
   let results
   if (searchUri === 'sinopia') {

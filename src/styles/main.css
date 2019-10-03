@@ -21,10 +21,6 @@ body {
   display: none;
 }
 
-/* .modal-dialog {
-  box-shadow: 0px 0px 00px 3000px #00000085;
-} */
-
 .btn-linky {
   padding: 0px;
 }
@@ -343,4 +339,14 @@ input.rbt-input-main {
 
 .type-span {
   padding-left: 8px;
+}
+
+th.search-id {
+  background-color: #F8F6EF;
+  width: 5%;
+}
+
+th.search-title {
+  background-color: #F8F6EF;
+  width: 95%;
 }

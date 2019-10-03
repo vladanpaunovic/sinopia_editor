@@ -58,6 +58,10 @@ export class ResourceTemplateForm extends Component {
     })
   }
 
+  cardRow = () => {
+
+  }
+
   renderComponentForm = () => (
     <div>
       <form onSubmit={e => e.preventDefault()}>
@@ -66,7 +70,6 @@ export class ResourceTemplateForm extends Component {
             this.props.propertyTemplates.map((propertyTemplate, index) => {
               const newReduxPath = [...this.props.reduxPath, propertyTemplate.propertyURI]
               const id = resourceToName(propertyTemplate.propertyURI)
-
               if (_.isEmpty(this.props.resourceProperties[propertyTemplate.propertyURI])) {
                 return (
                   <PropertyPanel reduxPath={newReduxPath} key={index} float={index} id={id}>

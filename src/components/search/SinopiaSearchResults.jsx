@@ -29,6 +29,8 @@ const SinopiaSearchResults = (props) => {
 
   // Generates an HTML row
   const generateTableRow = (row, _index) => {
+    console.log(`in Table Row `)
+    console.warn(row)
     const rowIndex = _index + 1
     const link = `${Config.sinopiaServerBase}/${row.uri}`
     return (
@@ -37,18 +39,20 @@ const SinopiaSearchResults = (props) => {
           { rowIndex }
         </td>
         <td>
-          <a href="{ link }">{ row.title }</a>
+          <a href={ link }>{ row.title }</a>
         </td>
       </tr>
     )
   }
+
+  console.log(`in search results`)
+  console.warn(props)
 
   if (props.searchResults.length === 0) {
     return null
   }
 
   return (
-<<<<<<< HEAD
     <React.Fragment>
       { props.error
         && <div className="row">
@@ -67,25 +71,6 @@ const SinopiaSearchResults = (props) => {
           <BootstrapTable id="search-results-list" keyField="uri" data={ props.searchResults } columns={ columns } />
         </div>
         <div className="col-sm-2"></div>
-=======
-    <div id="search-results" className="row">
-      <div className="col-sm-2"></div>
-      <div className="col-sm-8">
-        <h3>Your List of Bibliographic Metadata Stored in Sinopia</h3>
-        <table className="table table-bordered" id="search-results-list">
-          <thead>
-            <th style="background-color: #F8F6EF, width: 5%">
-              ID
-            </th>
-            <th style="background-color: #F8F6EF, width: 95%">
-              Title
-            </th>
-          </thead>
-          <tbody>
-            { props.searchResults.forEach((row, _index) => generateTableRow(row, _index)) }
-          </tbody>
-        </table>
->>>>>>> Removing bootstrap specific React modules, replacing with HTML attributes and css classes from Bootstrap 4
       </div>
     </React.Fragment>
   )
