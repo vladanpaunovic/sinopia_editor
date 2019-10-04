@@ -30,15 +30,22 @@ describe('<SinopiaResourceTemplates />', () => {
   })
 
   it('has a bootstrap table that displays the results from the calls to sinopia_server', () => {
-    expect(wrapper.find('BootstrapTableContainer').length).toEqual(1)
+    expect(wrapper.find('.table').length).toEqual(1)
   })
 
   describe('display', () => {
     const wrapper = shallow(<SinopiaResourceTemplates.WrappedComponent messages={[]} resourceTemplateSummaries={resourceTemplateSummaries} />)
 
     it('renders the table of resource templates with name, id, author, guiding statement, download columns', () => {
-      const tableHeaderCellText = wrapper.find('BootstrapTableContainer').props().columns.map(col => col.text)
-      expect(tableHeaderCellText).toEqual(['Template name', 'ID', 'Author', 'Guiding statement', 'Download'])
+      // const tableHeaderCellText = wrapper.find('thead').props().columns.map(col => col.text)
+      // console.log(wrapper.debug())
+      const tableHeaderCellText = wrapper.find('div > table > thead > tr > th')
+      console.log(Object.values(tableHeaderCellText))
+      // tableHeaderCellText.forEach((row, _index) => {
+      //   console.log(`Row is ${row.text()} ${_index}`)
+      // })
+      expect(tableHeaderCellText.text()).toEqual('Template name')
+      // expect(tableHeaderCellText).toEqual(['Template name', 'ID', 'Author', 'Guiding statement', 'Download'])
     })
   })
 

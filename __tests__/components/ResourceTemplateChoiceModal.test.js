@@ -4,6 +4,7 @@ import ResourceTemplateChoiceModal from 'components/ResourceTemplateChoiceModal'
 import { renderWithRedux, createReduxStore } from 'testUtils'
 import { fireEvent, wait } from '@testing-library/react'
 
+$.fn.modal = jest.fn()
 
 describe('<ResourceTemplateChoiceModal />', () => {
   const createState = (options = {}) => {
@@ -35,6 +36,10 @@ describe('<ResourceTemplateChoiceModal />', () => {
   }
 
   it('saves choice', async () => {
+    const portalRoot = document.createElement('div')
+    portalRoot.setAttribute('id', 'modal')
+    document.body.appendChild(portalRoot)
+
     const mockChoose = jest.fn()
     const store = createReduxStore(createState())
     const { getByText, getByTestId, queryByText } = renderWithRedux(
@@ -54,6 +59,10 @@ describe('<ResourceTemplateChoiceModal />', () => {
   })
 
   it('closes when click Cancel', async () => {
+    const portalRoot = document.createElement('div')
+    portalRoot.setAttribute('id', 'modal')
+    document.body.appendChild(portalRoot)
+
     const store = createReduxStore(createState())
     const { queryByText, getByText } = renderWithRedux(
       <div><ResourceTemplateChoiceModal choose={jest.fn()} /></div>, store,

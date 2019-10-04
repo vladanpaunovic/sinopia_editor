@@ -17,7 +17,7 @@ describe('<PropertyLabelInfoTooltip />', () => {
   const wrapper = shallow(<PropertyLabelInfoTooltip {...props} />)
 
   it('displays a tooltip from the label if the remark is not a valid URL', () => {
-    expect(wrapper.find(OverlayTrigger).length).toEqual(1)
+    expect(wrapper.find('div[data-html="true"]').length).toEqual(1)
   })
 
   it('renders an info icon', () => {

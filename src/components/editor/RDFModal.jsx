@@ -1,16 +1,14 @@
 // Copyright 2019 Stanford University see LICENSE for license
 
 import React from 'react'
-import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import GraphBuilder from 'GraphBuilder'
-import { showRdfPreview } from 'actions/index'
+import ModalWrapper from './ModalWrapper'
 import SaveAndPublishButton from './SaveAndPublishButton'
 
 const RDFModal = (props) => {
-
-  return (
+  const modal = (
     <div className="modal fade" id="rdf-modal" tabIndex="-1" role="dialog">
       <div className="modal-dialog modal-lg">
         <div className="modal-content">
@@ -32,11 +30,12 @@ const RDFModal = (props) => {
         </div>
       </div>
     </div>)
+
+  return (<ModalWrapper modal={modal} />)
 }
 
 RDFModal.propTypes = {
   show: PropTypes.bool,
-  showRdfPreview: PropTypes.func,
   rdf: PropTypes.func,
 }
 
@@ -45,6 +44,4 @@ const mapStateToProps = state => ({
   rdf: () => new GraphBuilder(state.selectorReducer).graph.toCanonical(),
 })
 
-const mapDispatchToProps = dispatch => bindActionCreators({ showRdfPreview }, dispatch)
-
-export default connect(mapStateToProps, mapDispatchToProps)(RDFModal)
+export default connect(mapStateToProps, null)(RDFModal)

@@ -13,19 +13,16 @@ const SaveAndPublishButton = (props) => {
   const save = () => {
     if (props.isSaved) {
       props.update(props.currentUser)
-    } else {
-      // props.showGroupChooser(true)
-      $('#group-choice-modal').modal('hide')
     }
   }
 
   return (
     <button id={ props.id }
-          className="btn btn-primary"
-          // onClick={ save }
-          data-toggle="modal"
-          data-target="#group-choice-modal"
-          disabled={ props.isDisabled }>
+            className="btn btn-primary"
+            onClick={ save }
+            data-toggle="modal"
+            data-target="#group-choice-modal"
+            disabled={ props.isDisabled }>
       Save
     </button>
   )

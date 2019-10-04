@@ -17,7 +17,7 @@ const InputValue = (props) => {
     props.removeItem(props.reduxPath)
   }
 
-  return (<div id="userInput">
+  return (<div id="userInput" style={{ marginTop: '.25em' }}>
     <div
       className="rbt-token rbt-token-removeable">
       {label}
@@ -30,6 +30,7 @@ const InputValue = (props) => {
     <button
       id="editItem"
       onClick={handleEditClick}
+      style={ { marginRight: '.25em' } }
       className="btn btn-sm btn-secondary btn-default">
       Edit
     </button>

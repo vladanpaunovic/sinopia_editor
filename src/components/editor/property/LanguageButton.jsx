@@ -1,6 +1,6 @@
 // Copyright 2019 Stanford University see LICENSE for license
 
-import React, { useState } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import shortid from 'shortid'
@@ -9,22 +9,15 @@ import { findNode } from 'selectors/resourceSelectors'
 import { languageLabel } from 'selectors/entitySelectors'
 
 const LanguageButton = (props) => {
-  const [langPayload, setLang] = useState(null)
-  const [show, setShow] = useState(false)
-
   const modalIdentifier = shortid.generate()
   const modalIdentiferTarget = `#${modalIdentifier}`
-
-  const handleClose = () => {
-    setShow(false)
-  }
 
   return (
     <React.Fragment>
       <button
         id="language"
         data-toggle="modal"
-        onClick={(event) => event.preventDefault()}
+        onClick={event => event?.preventDefault()}
         data-target={modalIdentiferTarget}
         className="btn btn-sm btn-secondary btn-literal">
         Language: {props.language}

@@ -58,21 +58,6 @@ const Search = (props) => {
     }
   }
 
-  let alert
-
-  if (showAlert) {
-    alert = (
-      <div className="alert alert-warning" key="0">
-        <button className="close" aria-label="close" onClick={() => setShowAlert(false)}>&times;</button>
-        {props.error.message}
-      </div>
-    )
-  }
-
-  useEffect(() => {
-    setShowAlert(props.error)
-  }, [props.error])
-
   const options = searchConfig.map(config => (<option key={config.authority} value={config.authority}>{config.label}</option>))
 
   let results

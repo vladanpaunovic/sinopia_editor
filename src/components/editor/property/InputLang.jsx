@@ -1,13 +1,13 @@
 // Copyright 2019 Stanford University see LICENSE for license
 
-import React, { useState, useEffect, useRef } from 'react'
+import React, { useState } from 'react'
 import { Typeahead } from 'react-bootstrap-typeahead'
 import PropTypes from 'prop-types'
 import { connect } from 'react-redux'
 import { findNode } from 'selectors/resourceSelectors'
 import { languageSelected } from 'actions/index'
 import { bindActionCreators } from 'redux'
-import { createPortal } from 'react-dom'
+import ModalWrapper from 'components/editor/ModalWrapper'
 import _ from 'lodash'
 
 /**
@@ -16,22 +16,9 @@ import _ from 'lodash'
  * See ISO 639 for the list of registered language codes
  */
 const InputLang = (props) => {
-  const modalRoot = document.getElementById("modal")
-  const el = useRef(document.createElement("div"))
-
-  useEffect(() => {
-    modalRoot.appendChild(el.current);
-  }, [])
-
-  useEffect(() => {
-    return () => {
-      modalRoot.removeChild(el.current)
-    }
-  }, [])
-  
   const [lang, setLang] = useState('')
-  const setPayLoad = selected => {
-    if(selected.length == 1) {
+  const setPayLoad = (selected) => {
+    if (selected.length === 1) {
       setLang(selected[0].id)
     } else {
       setLang('')
@@ -39,10 +26,10 @@ const InputLang = (props) => {
   }
 
   const handleLangSubmit = (event) => {
-    if(! _.isEmpty(lang)) {
+    if (!_.isEmpty(lang)) {
       props.languageSelected({
         reduxPath: props.reduxPath,
-        lang: lang,
+        lang,
       })
     }
     event.preventDefault()
@@ -77,14 +64,14 @@ const InputLang = (props) => {
       </div>
     </React.Fragment>
   )
-  // In theory, you could write a modal wrapper that handled the portalling.
-  return createPortal(modal, el.current)
+
+  return (<ModalWrapper modal={modal} />)
 }
 
 InputLang.propTypes = {
   textValue: PropTypes.string.isRequired,
   reduxPath: PropTypes.array.isRequired,
-  handleLangChange: PropTypes.func,
+  languageSelected: PropTypes.func,
   options: PropTypes.array,
   loading: PropTypes.bool,
   id: PropTypes.string.isRequired,

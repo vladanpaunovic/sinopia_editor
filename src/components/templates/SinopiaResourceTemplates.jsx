@@ -3,8 +3,6 @@
 import React, { Component } from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
-import BootstrapTable from 'react-bootstrap-table-next'
 import Download from 'components/templates/Download'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
@@ -34,11 +32,29 @@ class SinopiaResourceTemplates extends Component {
     })
   }
 
-  linkFormatter = (cell, row) => (
-    <Link to={{ pathname: '/editor', state: { } }} onClick={e => this.handleClick(row.id, e)}>{cell}</Link>
-  )
-
-  downloadLinkFormatter = (cell, row) => (<Download resourceTemplateId={ row.id } groupName={ row.group } />)
+  generateRows = () => {
+    const rows = []
+    this.props.resourceTemplateSummaries.forEach((row) => {
+      rows.push(<tr key={row.id}>
+        <td style={{ wordBreak: 'break-all' }}>
+          <Link to={{ pathname: '/editor', state: { } }} onClick={e => this.handleClick(row.id, e)}>{row.name}</Link>
+        </td>
+        <td style={{ wordBreak: 'break-all' }}>
+          { row.id }
+        </td>
+        <td style={{ wordBreak: 'break-all' }}>
+          { row.author }
+        </td>
+        <td style={{ wordBreak: 'break-all' }}>
+          { row.remark }
+        </td>
+        <td>
+          <Download resourceTemplateId={ row.id } groupName={ row.group } />
+        </td>
+      </tr>)
+    })
+    return rows
+  }
 
   render() {
     if (this.props.resourceTemplateSummaries.length === 0) {
@@ -62,62 +78,26 @@ class SinopiaResourceTemplates extends Component {
       ? (<span />)
       : (<div className="alert alert-warning">{ this.props.error }</div>)
 
-    const defaultSorted = [{
-      dataField: 'name', // default sort column name
-      order: 'asc', // default sort order
-    }]
-
-    const columns = [
-      {
-        dataField: 'name',
-        text: 'Template name',
-        sort: true,
-        formatter: this.linkFormatter,
-        headerStyle: { backgroundColor: '#F8F6EF', width: '30%' },
-        style: { wordBreak: 'break-all' },
-      },
-      {
-        dataField: 'id',
-        text: 'ID',
-        sort: true,
-        headerStyle: { backgroundColor: '#F8F6EF', width: '30%' },
-        style: { wordBreak: 'break-all' },
-      },
-      {
-        dataField: 'author',
-        text: 'Author',
-        sort: true,
-        headerStyle: { backgroundColor: '#F8F6EF', width: '10%' },
-        style: { wordBreak: 'break-all' },
-      },
-      {
-        dataField: 'remark',
-        text: 'Guiding statement',
-        sort: false,
-        headerStyle: { backgroundColor: '#F8F6EF', width: '22%' },
-        style: { wordBreak: 'break-all' },
-      },
-      {
-        dataField: 'download',
-        text: 'Download',
-        sort: false,
-        formatter: this.downloadLinkFormatter,
-        headerStyle: { backgroundColor: '#F8F6EF', width: '8%' },
-        style: { wordBreak: 'break-all' },
-      },
-    ]
-
     return (
       <div>
         { createResourceMessage }
         { errorMessage }
         <h4>Available Resource Templates in Sinopia</h4>
-        <BootstrapTable
-          id="resource-template-list"
-          keyField="key"
-          data={ this.props.resourceTemplateSummaries }
-          columns={ columns }
-          defaultSorted={ defaultSorted }/>
+        <table className="table table-bordered"
+               id="resource-template-list">
+          <thead>
+            <tr>
+              <th style={{ backgroundColor: '#F8F6EF', width: '30%' }}>Template name</th>
+              <th style={{ backgroundColor: '#F8F6EF', width: '30%' }}>ID</th>
+              <th style={{ backgroundColor: '#F8F6EF', width: '10%' }}>Author</th>
+              <th style={{ backgroundColor: '#F8F6EF', width: '22%' }}>Guiding statement</th>
+              <th style={{ backgroundColor: '#F8F6EF', width: '8%' }}>Download</th>
+            </tr>
+          </thead>
+          <tbody>
+            { this.generateRows()}
+          </tbody>
+        </table>
       </div>
     )
   }

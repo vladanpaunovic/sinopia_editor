@@ -6,10 +6,10 @@ import { connect } from 'react-redux'
 import { bindActionCreators } from 'redux'
 import PropTypes from 'prop-types'
 import Config from 'Config'
-import 'react-bootstrap-table-next/dist/react-bootstrap-table2.min.css'
 import { getCurrentUser } from 'authSelectors'
 import { retrieveResource } from 'actionCreators/resources'
 import { rootResource } from 'selectors/resourceSelectors'
+
 
 const SinopiaSearchResults = (props) => {
   const [navigateEditor, setNavigateEditor] = useState(false)
@@ -28,31 +28,26 @@ const SinopiaSearchResults = (props) => {
   })
 
   // Generates an HTML row
-  const generateTableRow = (row, _index) => {
-    console.log(`in Table Row `)
-    console.warn(row)
-    const rowIndex = _index + 1
-    const link = `${Config.sinopiaServerBase}/${row.uri}`
-    return (
-      <tr>
-        <td>
-          { rowIndex }
-        </td>
-        <td>
-          <a href={ link }>{ row.title }</a>
-        </td>
-      </tr>
-    )
-  }
 
-  console.log(`in search results`)
-  console.warn(props)
+  const generateRows = () => {
+    const rows = []
+    props.searchResults.forEach((row, _index) => {
+      const rowIndex = _index + 1
+      const link = `${Config.sinopiaServerBase}/${row.uri}`
+      rows.push(<tr key={_index}>
+        <td>{ rowIndex }</td>
+        <td><button className="btn btn-link" onClick={ handleClick }>{ row.title }</button></td>
+      </tr>)
+    })
+    return rows
+  }
 
   if (props.searchResults.length === 0) {
     return null
   }
 
   return (
+<<<<<<< HEAD
     <React.Fragment>
       { props.error
         && <div className="row">
@@ -71,6 +66,27 @@ const SinopiaSearchResults = (props) => {
           <BootstrapTable id="search-results-list" keyField="uri" data={ props.searchResults } columns={ columns } />
         </div>
         <div className="col-sm-2"></div>
+=======
+    <div id="search-results" className="row">
+      <div className="col-sm-2"></div>
+      <div className="col-sm-8">
+        <h3>Your List of Bibliographic Metadata Stored in Sinopia</h3>
+        <table className="table table-bordered" id="search-results-list">
+          <thead>
+            <tr>
+              <th className="sinopia" style={{ width: '5%' }}>
+                ID
+              </th>
+              <th className="sinopia" style={{ width: '95%' }}>
+                Title
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            { generateRows() }
+          </tbody>
+        </table>
+>>>>>>> Added ModalWrapper and test for the various modals in the Editor
       </div>
     </React.Fragment>
   )

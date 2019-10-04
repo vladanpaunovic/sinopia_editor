@@ -1,9 +1,8 @@
 // Copyright 2019 Stanford University see LICENSE for license
 
-import React, { useState, useMemo } from 'react'
+import React, { useState, useEffect, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import Button from 'react-bootstrap/lib/Button'
-import Modal from 'react-bootstrap/lib/Modal'
+import ModalWrapper from 'components/editor/ModalWrapper'
 import PropTypes from 'prop-types'
 import { closeResourceTemplateChooser as closeResourceTemplateChooserAction } from 'actions/index'
 
@@ -12,6 +11,15 @@ const ResourceTemplateChoiceModal = (props) => {
   const closeResourceTemplateChooser = () => dispatch(closeResourceTemplateChooserAction())
 
   const show = useSelector(state => state.selectorReducer.editor.resourceTemplateChoice.show)
+
+
+  useEffect(() => {
+    if (show) {
+      /* eslint no-undef: 'off' */
+      $('#choose-rt').modal('show')
+    }
+  })
+
 
   const resourceTemplateSummaries = useSelector(state => Object.values(state.selectorReducer.entities.resourceTemplateSummaries))
   const sortedResourceTemplateSummaries = useMemo(() => resourceTemplateSummaries.sort(
@@ -22,6 +30,7 @@ const ResourceTemplateChoiceModal = (props) => {
   const [selectedValue, setSelectedValue] = useState(defaultSelectedValue)
 
   const updateSelectedValue = (event) => {
+    event.preventDefault()
     setSelectedValue(event.target.value)
   }
 
@@ -30,38 +39,43 @@ const ResourceTemplateChoiceModal = (props) => {
     closeResourceTemplateChooser()
   }
 
-  return (
-    <div>
-      <Modal show={ show } onHide={ () => closeResourceTemplateChooser() } bsSize="lg">
-        <Modal.Header className="prop-heading" closeButton>
-          <Modal.Title>
-            Choose resource template
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body className="group-panel">
-          <form className="group-select-options" >
-            <div className="form-group">
+  const modal = (
+    <div className="modal" tabIndex="-1" role="dialog" id="choose-rt">
+      <div className="modal-dialog" role="document">
+        <div className="modal-content">
+          <div className="modal-header prop-heading">
+            <h4 className="modal-title">Choose resource template</h4>
+            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <form className="group-select-options">
+            <div className="modal-body group-panel">
               <label className="group-select-label" htmlFor="resourceTemplateSelect">
-                Into which resource template do you want to load this resource?
+              Into which resource template do you want to load this resource?
               </label>
-              <select data-testid="resourceTemplateSelect" id="resourceTemplateSelect"
+              <select className="form-control"
+                      data-testid="resourceTemplateSelect"
+                      id="resourceTemplateSelect"
                       defaultValue={ selectedValue } onBlur={ event => updateSelectedValue(event)} >
                 { sortedResourceTemplateSummaries.map(summary => <option key={summary.key} value={ summary.id }>{ summary.name }</option>) }
               </select>
-            </div>
-            <div className="group-choose-buttons">
-              <Button bsStyle="link" style={{ paddingRight: '20px' }} onClick={ () => closeResourceTemplateChooser() }>
-                Cancel
-              </Button>
-              <Button bsStyle="primary" bsSize="small" onClick={ saveAndClose }>
-                Save
-              </Button>
+              <div className="group-choose-buttons">
+                <button className="btn btn-link" style={{ paddingRight: '20px' }} data-dismiss="modal">
+                  Cancel
+                </button>
+                <button className="btn btn-primary btn-sm" onClick={ saveAndClose } data-dismiss="modal">
+                 Save
+                </button>
+              </div>
             </div>
           </form>
-        </Modal.Body>
-      </Modal>
+        </div>
+      </div>
     </div>
   )
+
+  return (<ModalWrapper modal={modal} />)
 }
 
 ResourceTemplateChoiceModal.propTypes = {

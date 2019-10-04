@@ -5,9 +5,10 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import Config from 'Config'
-import { closeGroupChooser, showRdfPreview } from 'actions/index'
+import { closeGroupChooser } from 'actions/index'
 import { getCurrentUser } from 'authSelectors'
 import { publishResource } from 'actionCreators/resources'
+import ModalWrapper from './ModalWrapper'
 
 const GroupChoiceModal = (props) => {
   // The ld4p group is only for templates
@@ -24,13 +25,9 @@ const GroupChoiceModal = (props) => {
   const saveAndClose = (event) => {
     event.preventDefault()
     props.publishResource(props.currentUser, selectedValue)
-    props.showRdfPreview(false)
-    // props.closeGroupChooser(false)
-    $('#group-choice-modal').modal('hide')
-
   }
 
-  return (
+  const modal = (
     <div>
       <div className="modal modal-lg"
            role="dialog"
@@ -57,10 +54,10 @@ const GroupChoiceModal = (props) => {
                   </select>
                   <div className="group-choose-buttons">
                     <button className="btn btn-link btn-sm" style={{ paddingRight: '20px' }}
-                      data-dismiss="modal">
+                            data-dismiss="modal">
                       Cancel
                     </button>
-                    <button className="btn btn-primary btn-sm" onClick={ saveAndClose }>
+                    <button className="btn btn-primary btn-sm" data-dismiss="modal" onClick={ saveAndClose }>
                       Save
                     </button>
                   </div>
@@ -72,11 +69,12 @@ const GroupChoiceModal = (props) => {
       </div>
     </div>
   )
+
+  return (<ModalWrapper modal={modal} />)
 }
 
 GroupChoiceModal.propTypes = {
   closeGroupChooser: PropTypes.func,
-  showRdfPreview: PropTypes.func,
   choose: PropTypes.func,
   show: PropTypes.bool,
   currentUser: PropTypes.object,
@@ -88,6 +86,6 @@ const mapStateToProps = state => ({
   currentUser: getCurrentUser(state),
 })
 
-const mapDispatchToProps = dispatch => bindActionCreators({ closeGroupChooser, showRdfPreview, publishResource }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ closeGroupChooser, publishResource }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupChoiceModal)

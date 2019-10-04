@@ -8,6 +8,11 @@ body {
   font-family: 'Source Sans Pro', sans-serif;
   margin: 0 10%;
 }
+
+pre {
+  background-color: #f5f5f5;
+  border: 1px solid #ccc;
+}
 .banner {
   background-size: cover;
   background-image: url("home-background.png");
@@ -15,10 +20,6 @@ body {
 
 .btn-link {
   border-color: transparent !important;
-}
-
-.modal-backdrop {
-  display: none;
 }
 
 .btn-linky {
@@ -341,12 +342,6 @@ input.rbt-input-main {
   padding-left: 8px;
 }
 
-th.search-id {
+th.sinopia {
   background-color: #F8F6EF;
-  width: 5%;
-}
-
-th.search-title {
-  background-color: #F8F6EF;
-  width: 95%;
 }

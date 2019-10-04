@@ -78,8 +78,10 @@
     "express": "^4.16.4",
     "file-loader": "^4.2.0",
     "file-saver": "^2.0.2",
+    "hookrouter": "^1.2.3",
     "html-webpack-plugin": "^3.2.0",
     "identity-obj-proxy": "^3.0.0",
+    "jquery": "^3.4.1",
     "lodash": "^4.17.14",
     "merge": "^1.2.1",
     "mixin-deep": ">=1.3.2",
@@ -164,7 +166,8 @@
     "setupFiles": [
       "jest-localstorage-mock",
       "jest-prop-type-error",
-      "dotenv/config"
+      "dotenv/config",
+      "<rootDir>/test-env.js"
     ],
     "testMatch": [
       "**/__tests__/**/*.test.[jt]s?(x)"
