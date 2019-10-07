@@ -1,7 +1,7 @@
 import React from 'react'
 import { fireEvent } from '@testing-library/react'
 // eslint-disable-next-line import/no-unresolved
-import { renderWithRedux, createReduxStore } from 'testUtils'
+import { renderWithRedux, createReduxStore, setupModal } from 'testUtils'
 import App from 'components/App'
 import { MemoryRouter } from 'react-router-dom'
 
@@ -87,6 +87,7 @@ const createInitialState = () => {
 
 describe('Preview and try to save resource', () => {
   const store = createReduxStore(createInitialState())
+  setupModal()
   const {
     getByText, getByTitle, queryByText, queryAllByText,
   } = renderWithRedux(
@@ -98,8 +99,11 @@ describe('Preview and try to save resource', () => {
     fireEvent.click(getByText('Linked Data Editor'))
     fireEvent.click(getByText('Editor'))
 
+    // const rdfModal = getByTestId('rdf-modal')
+
     // Preview the RDF
     fireEvent.click(getByTitle('Preview RDF'))
+
     expect(getByText('RDF Preview')).toBeInTheDocument()
     expect(getByText(/<> <http:\/\/sinopia.io\/vocabulary\/hasResourceTemplate> "resourceTemplate:bf2:WorkTitle" ./)).toBeInTheDocument()
 
@@ -110,7 +114,6 @@ describe('Preview and try to save resource', () => {
       return btn.id === 'modal-save'
     })
     fireEvent.click(saveAndPublish)
-
     expect(queryByText('Which group do you want to save to?')).not.toBeInTheDocument()
     expect(queryByText(/There was a probem saving this resource/)).toBeInTheDocument()
     expect(queryByText('Required')).toBeInTheDocument()

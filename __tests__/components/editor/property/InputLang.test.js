@@ -2,9 +2,9 @@
 
 import React from 'react'
 import InputLang from 'components/editor/property/InputLang'
-import { Provider } from 'react-redux'
-import { fireEvent, waitForElement } from '@testing-library/react'
-import { renderWithRedux, createReduxStore } from 'testUtils'
+import { fireEvent } from '@testing-library/react'
+/* eslint import/no-unresolved: 'off' */
+import { renderWithRedux, createReduxStore, setupModal } from 'testUtils'
 
 const state = {
   selectorReducer: {
@@ -14,14 +14,14 @@ const state = {
           id: 'en',
           label: 'English',
         }],
-      }
+      },
     },
     resource: {
       'http://id.loc.gov/ontologies/bibframe/instanceOf': {
-        'content': '45678'
-      }
-    }
-  }
+        content: '45678',
+      },
+    },
+  },
 }
 
 const plProps = {
@@ -33,39 +33,46 @@ const plProps = {
   },
   loadLanguages: jest.fn(),
   options: [],
-  reduxPath: [ 'resource', 'http://id.loc.gov/ontologies/bibframe/instanceOf'],
+  reduxPath: ['resource', 'http://id.loc.gov/ontologies/bibframe/instanceOf'],
 }
 
 describe('<InputLang />', () => {
   const store = createReduxStore(state)
-  const portalRoot = document.createElement('div')
-  portalRoot.setAttribute('id', 'modal')
-  document.body.appendChild(portalRoot)
+  setupModal()
 
   it('contains a label with the value of propertyLabel', () => {
-    const { queryByText} = renderWithRedux(
+    const { queryByText } = renderWithRedux(
       <InputLang {...plProps} />,
-      store
+      store,
     )
     const expected = 'Select language for 45678'
     expect(queryByText(expected)).toBeInTheDocument()
   })
 
   it('typeahead component exists', () => {
-    const { getByRole, getByText, debug } = renderWithRedux(
+    const { getByRole } = renderWithRedux(
       <InputLang {...plProps} />,
-      store
+      store,
     )
     expect(getByRole('combobox')).toBeInTheDocument()
   })
 
-  it('calls theon change', async () => {
-    const { getByRole, getByText, debug } = renderWithRedux(
+  it('change to match text changes input text', async () => {
+    global.document.createRange = () => ({
+      setStart: () => {},
+      setEnd: () => {},
+      commonAncestorContainer: {
+        nodeName: 'BODY',
+        ownerDocument: document,
+      },
+    })
+
+    const { getByRole } = renderWithRedux(
       <InputLang {...plProps} />,
-      store
+      store,
     )
     fireEvent.change(getByRole('combobox'), { target: { value: 'English' } })
-    // wrapper.find('#langComponent').simulate('change', [{ id: 'en', label: 'English' }])
-    await waitForElement(() => getByText('English'))
+    const comboBox = getByRole('combobox')
+    expect(comboBox.value).toBe('English')
   })
 })

@@ -20,6 +20,7 @@ const SaveAndPublishButton = (props) => {
     <button id={ props.id }
             className="btn btn-primary"
             onClick={ save }
+            aria-label="Save"
             data-toggle="modal"
             data-target="#group-choice-modal"
             disabled={ props.isDisabled }>

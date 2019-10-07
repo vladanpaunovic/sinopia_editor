@@ -59,7 +59,6 @@ describe('<UpdateResourceModal> with conflict message', () => {
   it('has a No button', () => {
     const button = wrapper.find('.btn').last()
     expect(button.text()).toEqual('No, get me out of here!')
-
   })
 })
 

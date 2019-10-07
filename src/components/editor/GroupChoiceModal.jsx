@@ -49,7 +49,10 @@ const GroupChoiceModal = (props) => {
               </div>
               <div>
                 <form className="group-select-options" >
-                  <select className="form-control" defaultValue={ selectedValue } onBlur={ event => updateSelectedValue(event)} >
+                  <select className="form-control"
+                          data-testid="groupSelect"
+                          defaultValue={ selectedValue }
+                          onBlur={ event => updateSelectedValue(event)} >
                     { groups.map((group, index) => <option key={index} value={ group[0] }>{ group[1] }</option>) }
                   </select>
                   <div className="group-choose-buttons">

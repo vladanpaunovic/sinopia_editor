@@ -37,33 +37,29 @@ describe('<SinopiaResourceTemplates />', () => {
     const wrapper = shallow(<SinopiaResourceTemplates.WrappedComponent messages={[]} resourceTemplateSummaries={resourceTemplateSummaries} />)
 
     it('renders the table of resource templates with name, id, author, guiding statement, download columns', () => {
-      // const tableHeaderCellText = wrapper.find('thead').props().columns.map(col => col.text)
-      // console.log(wrapper.debug())
       const tableHeaderCellText = wrapper.find('div > table > thead > tr > th')
-      console.log(Object.values(tableHeaderCellText))
-      // tableHeaderCellText.forEach((row, _index) => {
-      //   console.log(`Row is ${row.text()} ${_index}`)
-      // })
-      expect(tableHeaderCellText.text()).toEqual('Template name')
-      // expect(tableHeaderCellText).toEqual(['Template name', 'ID', 'Author', 'Guiding statement', 'Download'])
+      expect(tableHeaderCellText.at(0).text()).toEqual('Template name')
+      expect(tableHeaderCellText.at(1).text()).toEqual('ID')
+      expect(tableHeaderCellText.at(2).text()).toEqual('Author')
+      expect(tableHeaderCellText.at(3).text()).toEqual('Guiding statement')
+      expect(tableHeaderCellText.at(4).text()).toEqual('Download')
     })
   })
 
   describe('linking back to the Editor component', () => {
     it('renders a link to the Editor', () => {
       expect.assertions(1)
-      const link = wrapper.instance().linkFormatter(resourceTemplateSummary.name, resourceTemplateSummary)
-
-      expect(link.props.to.pathname).toEqual('/editor')
+      const link = wrapper.find('Link')
+      expect(link.props().to.pathname).toEqual('/editor')
     })
   })
   describe('linking to download the template', () => {
     it('renders a link to download the template', () => {
       expect.assertions(2)
-      const link = wrapper.instance().downloadLinkFormatter(resourceTemplateSummary.name, resourceTemplateSummary)
+      const link = wrapper.find('Download')
 
-      expect(link.props.resourceTemplateId).toEqual('ld4p:resourceTemplate:bf2:Note')
-      expect(link.props.groupName).toEqual('stanford')
+      expect(link.props().resourceTemplateId).toEqual('ld4p:resourceTemplate:bf2:Note')
+      expect(link.props().groupName).toEqual('stanford')
     })
   })
 })

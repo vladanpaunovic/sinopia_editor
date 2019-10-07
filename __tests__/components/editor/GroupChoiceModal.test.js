@@ -1,35 +1,38 @@
 // Copyright 2019 Stanford University see LICENSE for license
 
 import React from 'react'
-import { shallow } from 'enzyme'
+import { mount } from 'enzyme'
 import Config from 'Config'
 import GroupChoiceModal from 'components/editor/GroupChoiceModal'
 /* eslint import/namespace: 'off' */
 import * as server from 'sinopiaServer'
 
 describe('<GroupChoiceModal />', () => {
+  const portalRoot = document.createElement('div')
+  portalRoot.setAttribute('id', 'modal')
+  document.body.appendChild(portalRoot)
+
   const rdfFunc = jest.fn().mockReturnValue('some triples')
   const mockCloseGroupChooser = jest.fn()
   const mockCloseRdfPreview = jest.fn()
   const currentUser = { name: 'Alfred E. Neuman' }
   const mockPublishMyResource = jest.fn()
-  const wrapper = shallow(<GroupChoiceModal.WrappedComponent show={true}
-                                                             rdf={rdfFunc}
-                                                             closeGroupChooser={mockCloseGroupChooser}
-                                                             showRdfPreview={mockCloseRdfPreview}
-                                                             currentUser={currentUser}
-                                                             publishResource={mockPublishMyResource} />)
+  const wrapper = mount(<GroupChoiceModal.WrappedComponent show={true}
+                                                           rdf={rdfFunc}
+                                                           closeGroupChooser={mockCloseGroupChooser}
+                                                           showRdfPreview={mockCloseRdfPreview}
+                                                           currentUser={currentUser}
+                                                           publishResource={mockPublishMyResource} />)
 
-  it('renders the <GroupChoiceModal /> component as a Modal', () => {
+  it('renders the <GroupChoiceModal /> component as a modal', () => {
     expect(wrapper.find('.modal').length).toBe(1)
   })
   describe('header', () => {
-    it('has a Modal.Header', () => {
+    it('has a modal header', () => {
       expect(wrapper.find('.modal-header').length).toBe(1)
     })
-    it('has a Modal.Title', () => {
-      expect(wrapper.find('.modal-title')
-        .childAt(0)
+    it('has a modal title', () => {
+      expect(wrapper.find('h4.modal-title')
         .text()).toEqual('Which group do you want to save to?')
     })
 
@@ -71,13 +74,10 @@ describe('<GroupChoiceModal />', () => {
     it('has a Cancel link', () => {
       expect(wrapper.find('.modal-body').find('.btn')
         .first()
-        .childAt(0)
         .text()).toEqual('Cancel')
     })
     it('has a save button', () => {
-      expect(wrapper.find('.modal-body').find('.form').find('.btn')
-        .last()
-        .childAt(0)
+      expect(wrapper.find('button.btn-primary')
         .text()).toEqual('Save')
     })
   })
@@ -93,28 +93,17 @@ describe('<GroupChoiceModal />', () => {
       })
       it('saves the RDF content with group choice when save is clicked and then closes the modals', () => {
         const selectedGroup = 'cornell' // default is first choice, which is cornell
-        wrapper.find('[bsStyle="primary"]').simulate('click')
+        wrapper.find('button.btn-primary').simulate('click')
         expect(mockPublishMyResource).toHaveBeenCalledWith(currentUser, selectedGroup)
-        expect(mockCloseRdfPreview).toHaveBeenCalled()
-        expect(mockCloseGroupChooser).toHaveBeenCalled()
       })
     })
     describe('error', () => {
       server.publishRDFResource = jest.fn().mockRejectedValue(new Error('publish error'))
       it('attempts to save the RDF content with group choice when save is clicked and then closes the modals', () => {
         const selectedGroup = 'cornell' // default is first choice, which is cornell
-        wrapper.find('[bsStyle="primary"]').simulate('click')
+        wrapper.find('button.btn-primary').simulate('click')
         expect(mockPublishMyResource).toHaveBeenCalledWith(currentUser, selectedGroup)
-        expect(mockCloseRdfPreview).toHaveBeenCalled()
-        expect(mockCloseGroupChooser).toHaveBeenCalled()
       })
-    })
-  })
-
-  describe('close button', () => {
-    it('closes the modal when the Cancel link is clicked', () => {
-      wrapper.find('[bsStyle="link"]').simulate('click')
-      expect(mockCloseGroupChooser).toHaveBeenCalled()
     })
   })
 })

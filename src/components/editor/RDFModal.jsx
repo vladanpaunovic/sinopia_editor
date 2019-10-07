@@ -9,10 +9,10 @@ import SaveAndPublishButton from './SaveAndPublishButton'
 
 const RDFModal = (props) => {
   const modal = (
-    <div className="modal fade" id="rdf-modal" tabIndex="-1" role="dialog">
+    <div className="modal fade" id="rdf-modal" data-testid="rdf-modal" tabIndex="-1" role="dialog">
       <div className="modal-dialog modal-lg">
         <div className="modal-content">
-          <div className="modal-header">
+          <div className="modal-header" data-testid="rdf-modal-header">
             <h4 className="modal-title">RDF Preview</h4>
             <button type="button" className="close" data-dismiss="modal" aria-label="Close">
               <span aria-hidden="true">&times;</span>

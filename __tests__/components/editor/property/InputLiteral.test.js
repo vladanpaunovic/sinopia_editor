@@ -2,8 +2,9 @@ import React from 'react'
 import { fireEvent, waitForElement, wait } from '@testing-library/react'
 import InputLiteral from 'components/editor/property/InputLiteral'
 import { showGroupChooser } from 'actions/index'
-/* eslint import/no-unresolved: 'off' */
-import { renderWithRedux, assertRDF, createReduxStore } from 'testUtils'
+/* eslint import/no-unresolved: 'off'  */
+/* eslint object-curly-newline: 'off' */
+import { renderWithRedux, assertRDF, createReduxStore, setupModal } from 'testUtils'
 
 // Testing principles:
 // * Test what the user sees / interacts with. User = [cataloger, developer plugging in componet]
@@ -80,6 +81,8 @@ const createInitialState = (options = {}) => {
   }
   return state
 }
+
+setupModal()
 
 const reduxPath = [
   'resource',

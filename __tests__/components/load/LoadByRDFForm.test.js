@@ -4,7 +4,7 @@ import React from 'react'
 import LoadByRDFForm from 'components/load/LoadByRDFForm'
 import { fireEvent, wait } from '@testing-library/react'
 /* eslint import/no-unresolved: 'off' */
-import { renderWithRedux, createReduxStore } from 'testUtils'
+import { renderWithRedux, createReduxStore, setupModal } from 'testUtils'
 import { getFixtureResourceTemplate } from '../../fixtureLoaderHelper'
 import * as sinopiaServer from 'sinopiaServer'
 import { createMemoryHistory } from 'history'
@@ -68,6 +68,8 @@ const resource = {
 }
 
 describe('LoadByRDFForm', () => {
+  setupModal()
+
   shortid.generate = jest.fn().mockReturnValue('abc123')
   sinopiaServer.getResourceTemplate.mockImplementation(getFixtureResourceTemplate)
   sinopiaServer.foundResourceTemplate.mockResolvedValue(true)

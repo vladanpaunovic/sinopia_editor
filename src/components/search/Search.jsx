@@ -11,6 +11,7 @@ import {
 import { clearRetrieveResourceError as clearRetrieveResourceErrorAction, clearSearchResults as clearSearchResultsAction } from 'actions/index'
 import SinopiaSearchResults from './SinopiaSearchResults'
 import QASearchResults from './QASearchResults'
+import SearchResultsPaging from './SearchResultsPaging'
 import SearchResultsMessage from './SearchResultsMessage'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faSearch } from '@fortawesome/free-solid-svg-icons'
