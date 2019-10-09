@@ -89,7 +89,7 @@ describe('Preview and try to save resource', () => {
   const store = createReduxStore(createInitialState())
   setupModal()
   const {
-    getByText, getByTitle, queryByText, queryAllByText,
+    getByText, getByTitle, queryByText, queryAllByText, getByTestId, debug,
   } = renderWithRedux(
     (<MemoryRouter><App /></MemoryRouter>), store,
   )
@@ -99,12 +99,15 @@ describe('Preview and try to save resource', () => {
     fireEvent.click(getByText('Linked Data Editor'))
     fireEvent.click(getByText('Editor'))
 
-    // const rdfModal = getByTestId('rdf-modal')
+    const rdfModal = getByTestId('rdf-modal')
+    expect(rdfModal.classList.contains('show')).toBe(false)
+    const groupChoiceModal = getByTestId('group-choice-modal')
+    expect(groupChoiceModal.classList.contains('show')).not.toBe(true)
 
     // Preview the RDF
     fireEvent.click(getByTitle('Preview RDF'))
-
-    expect(getByText('RDF Preview')).toBeInTheDocument()
+    debug(getByTitle('Preview RDF'))
+    expect(rdfModal.classList.contains('show')).toBe(true)
     expect(getByText(/<> <http:\/\/sinopia.io\/vocabulary\/hasResourceTemplate> "resourceTemplate:bf2:WorkTitle" ./)).toBeInTheDocument()
 
     // Save
@@ -114,8 +117,11 @@ describe('Preview and try to save resource', () => {
       return btn.id === 'modal-save'
     })
     fireEvent.click(saveAndPublish)
-    expect(queryByText('Which group do you want to save to?')).not.toBeInTheDocument()
-    expect(queryByText(/There was a probem saving this resource/)).toBeInTheDocument()
+
+    // All modals closed
+    expect(rdfModal.classList.contains('show')).not.toBe(true)
+    expect(groupChoiceModal.classList.contains('show')).not.toBe(true)
+    expect(queryByText(/There was a problem saving this resource/)).toBeInTheDocument()
     expect(queryByText('Required')).toBeInTheDocument()
   })
 })

@@ -18,7 +18,7 @@ const ErrorMessages = (props) => {
       <div className="col-md-12" style={{ marginTop: '10px' }}>
         <div className="alert alert-danger alert-dismissible">
           <button className="close" data-dismiss="alert" aria-label="close">&times;</button>
-          There was a probem saving this resource. Validation errors: <ul>{errorList}</ul>
+          There was a problem saving this resource. Validation errors: <ul>{errorList}</ul>
         </div>
       </div>
     </div>

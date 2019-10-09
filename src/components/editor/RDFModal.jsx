@@ -1,20 +1,40 @@
 // Copyright 2019 Stanford University see LICENSE for license
 
 import React from 'react'
-import { connect } from 'react-redux'
+import { hideModal } from 'actions/index'
+import { connect, useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
 import GraphBuilder from 'GraphBuilder'
 import ModalWrapper from './ModalWrapper'
 import SaveAndPublishButton from './SaveAndPublishButton'
 
 const RDFModal = (props) => {
+  const dispatch = useDispatch()
+
+  const classes = ['modal', 'fade']
+  let display = 'none'
+  if (props.show) {
+    classes.push('show')
+    display = 'block'
+  }
+
+  const handleClose = (event) => {
+    dispatch(hideModal())
+    event.preventDefault()
+  }
+
   const modal = (
-    <div className="modal fade" id="rdf-modal" data-testid="rdf-modal" tabIndex="-1" role="dialog">
+    <div className={ classes.join(' ') }
+         id="rdf-modal"
+         data-testid="rdf-modal"
+         tabIndex="-1"
+         role="dialog"
+         style={{ display }}>
       <div className="modal-dialog modal-lg">
         <div className="modal-content">
           <div className="modal-header" data-testid="rdf-modal-header">
             <h4 className="modal-title">RDF Preview</h4>
-            <button type="button" className="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" className="close" onClick={handleClose} aria-label="Close">
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -40,7 +60,7 @@ RDFModal.propTypes = {
 }
 
 const mapStateToProps = state => ({
-  show: state.selectorReducer.editor.rdfPreview.show,
+  show: state.selectorReducer.editor.modal === 'RDFModal',
   rdf: () => new GraphBuilder(state.selectorReducer).graph.toCanonical(),
 })
 

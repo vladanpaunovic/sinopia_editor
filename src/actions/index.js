@@ -222,3 +222,12 @@ export const updateProperty = (reduxPath, resourceFragment, resourceTemplates) =
   type: 'UPDATE_PROPERTY',
   payload: { reduxPath, resourceFragment, resourceTemplates },
 })
+
+export const showModal = name => ({
+  type: 'SHOW_MODAL',
+  payload: name,
+})
+
+export const hideModal = () => ({
+  type: 'HIDE_MODAL',
+})

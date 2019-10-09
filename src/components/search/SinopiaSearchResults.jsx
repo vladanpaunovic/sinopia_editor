@@ -47,7 +47,6 @@ const SinopiaSearchResults = (props) => {
   }
 
   return (
-<<<<<<< HEAD
     <React.Fragment>
       { props.error
         && <div className="row">
@@ -58,15 +57,7 @@ const SinopiaSearchResults = (props) => {
             </div>
           </div>
         </div>
-      }
-      <div id="search-results" className="row">
-        <div className="col-sm-2"></div>
-        <div className="col-sm-8">
-          <h3>Your List of Bibliographic Metadata Stored in Sinopia</h3>
-          <BootstrapTable id="search-results-list" keyField="uri" data={ props.searchResults } columns={ columns } />
-        </div>
-        <div className="col-sm-2"></div>
-=======
+    }
     <div id="search-results" className="row">
       <div className="col-sm-2"></div>
       <div className="col-sm-8">
@@ -86,9 +77,9 @@ const SinopiaSearchResults = (props) => {
             { generateRows() }
           </tbody>
         </table>
->>>>>>> Added ModalWrapper and test for the various modals in the Editor
       </div>
-    </React.Fragment>
+    </div>
+[]  </React.Fragment>
   )
 }
 

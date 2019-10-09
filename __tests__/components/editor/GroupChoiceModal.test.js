@@ -2,23 +2,25 @@
 
 import React from 'react'
 import { mount } from 'enzyme'
+/* eslint import/no-unresolved: 'off' */
+import { setupModal } from 'testUtils'
 import Config from 'Config'
 import GroupChoiceModal from 'components/editor/GroupChoiceModal'
 /* eslint import/namespace: 'off' */
 import * as server from 'sinopiaServer'
 
 describe('<GroupChoiceModal />', () => {
-  const portalRoot = document.createElement('div')
-  portalRoot.setAttribute('id', 'modal')
-  document.body.appendChild(portalRoot)
+  setupModal()
 
   const rdfFunc = jest.fn().mockReturnValue('some triples')
   const mockCloseGroupChooser = jest.fn()
   const mockCloseRdfPreview = jest.fn()
+  const mockHideModal = jest.fn()
   const currentUser = { name: 'Alfred E. Neuman' }
   const mockPublishMyResource = jest.fn()
   const wrapper = mount(<GroupChoiceModal.WrappedComponent show={true}
                                                            rdf={rdfFunc}
+                                                           hideModal = {mockHideModal}
                                                            closeGroupChooser={mockCloseGroupChooser}
                                                            showRdfPreview={mockCloseRdfPreview}
                                                            currentUser={currentUser}

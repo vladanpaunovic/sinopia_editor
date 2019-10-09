@@ -1,25 +1,24 @@
 // Copyright 2019 Stanford University see LICENSE for license
 
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useMemo } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import ModalWrapper from 'components/editor/ModalWrapper'
 import PropTypes from 'prop-types'
-import { closeResourceTemplateChooser as closeResourceTemplateChooserAction } from 'actions/index'
+import { closeResourceTemplateChooser as closeResourceTemplateChooserAction, hideModal } from 'actions/index'
 
 const ResourceTemplateChoiceModal = (props) => {
   const dispatch = useDispatch()
+  /* eslint no-unused-vars: "off" */
   const closeResourceTemplateChooser = () => dispatch(closeResourceTemplateChooserAction())
 
   const show = useSelector(state => state.selectorReducer.editor.resourceTemplateChoice.show)
+  const classes = ['modal', 'fade']
+  let display = 'none'
 
-
-  useEffect(() => {
-    if (show) {
-      /* eslint no-undef: 'off' */
-      $('#choose-rt').modal('show')
-    }
-  })
-
+  if (show) {
+    classes.push('show')
+    display = 'block'
+  }
 
   const resourceTemplateSummaries = useSelector(state => Object.values(state.selectorReducer.entities.resourceTemplateSummaries))
   const sortedResourceTemplateSummaries = useMemo(() => resourceTemplateSummaries.sort(
@@ -34,13 +33,20 @@ const ResourceTemplateChoiceModal = (props) => {
     setSelectedValue(event.target.value)
   }
 
+  const close = () => {
+    hideModal()
+  }
+
   const saveAndClose = () => {
     props.choose(selectedValue)
-    closeResourceTemplateChooser()
+    close()
   }
 
   const modal = (
-    <div className="modal" tabIndex="-1" role="dialog" id="choose-rt">
+    <div className="{ classes.join(' ') }"
+         tabIndex="-1"
+         role="dialog"
+         id="choose-rt" style={{ display }}>
       <div className="modal-dialog" role="document">
         <div className="modal-content">
           <div className="modal-header prop-heading">
@@ -61,10 +67,10 @@ const ResourceTemplateChoiceModal = (props) => {
                 { sortedResourceTemplateSummaries.map(summary => <option key={summary.key} value={ summary.id }>{ summary.name }</option>) }
               </select>
               <div className="group-choose-buttons">
-                <button className="btn btn-link" style={{ paddingRight: '20px' }} data-dismiss="modal">
+                <button className="btn btn-link" style={{ paddingRight: '20px' }} onClick={ close }>
                   Cancel
                 </button>
-                <button className="btn btn-primary btn-sm" onClick={ saveAndClose } data-dismiss="modal">
+                <button className="btn btn-primary btn-sm" onClick={ saveAndClose }>
                  Save
                 </button>
               </div>

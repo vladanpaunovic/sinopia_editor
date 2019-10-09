@@ -3,7 +3,7 @@ import { fireEvent, waitForElement, wait } from '@testing-library/react'
 import InputListLOC from 'components/editor/property/InputListLOC'
 import { showGroupChooser } from 'actions/index'
 /* eslint import/no-unresolved: 'off' */
-import { renderWithRedux, assertRDF, createReduxStore } from 'testUtils'
+import { renderWithRedux, assertRDF, createReduxStore, setupModal } from 'testUtils'
 
 const createInitialState = (options = {}) => {
   const state = {
@@ -130,6 +130,7 @@ const reduxPath = [
 ]
 
 describe('InputListLOC', () => {
+  setupModal()
   global.fetch = jest.fn().mockImplementation(url => Promise.resolve({ json: () => lookups[url] }))
 
   it('renders when no value', () => {

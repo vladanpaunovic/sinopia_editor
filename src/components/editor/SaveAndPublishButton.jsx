@@ -13,6 +13,8 @@ const SaveAndPublishButton = (props) => {
   const save = () => {
     if (props.isSaved) {
       props.update(props.currentUser)
+    } else {
+      props.showGroupChooser()
     }
   }
 
@@ -21,8 +23,6 @@ const SaveAndPublishButton = (props) => {
             className="btn btn-primary"
             onClick={ save }
             aria-label="Save"
-            data-toggle="modal"
-            data-target="#group-choice-modal"
             disabled={ props.isDisabled }>
       Save
     </button>

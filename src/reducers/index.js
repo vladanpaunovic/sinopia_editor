@@ -6,6 +6,7 @@ import {
   removeMyItem, setItemsOrSelections, setBaseURL,
   setMyItemsLang, showGroupChooser, closeGroupChooser, showRdfPreview,
   showCopyNewMessage, validate, showResourceTemplateChooser, closeResourceTemplateChooser,
+  showModal, hideModal,
 } from './inputs'
 import {
   setResourceTemplate, clearResourceTemplates, setResourceTemplateSummary,

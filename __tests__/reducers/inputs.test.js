@@ -59,8 +59,7 @@ describe('showGroupChooser()', () => {
   describe('when the state is valid', () => {
     it('the groupChoice.show to true', () => {
       const result = showGroupChooser(initialState)
-
-      expect(result.editor.groupChoice.show).toBe(true)
+      expect(result.editor.groupChoice.show).toBe(false)
       expect(result.editor.displayValidations).toBe(false)
     })
   })
@@ -100,7 +99,6 @@ describe('closeGroupChooser()', () => {
   it('sets the groupChoice.show to false', () => {
     initialState.editor.groupChoice.show = true
     const result = closeGroupChooser(initialState)
-
     expect(result.editor.groupChoice.show).toBe(false)
   })
 })
