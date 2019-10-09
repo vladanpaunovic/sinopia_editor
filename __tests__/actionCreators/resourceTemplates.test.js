@@ -4,6 +4,10 @@ import { fetchResourceTemplate, fetchResourceTemplateSummaries } from 'actionCre
 /* eslint import/namespace: 'off' */
 import * as server from 'sinopiaServer'
 import { getFixtureResourceTemplate } from '../fixtureLoaderHelper'
+import Config from 'Config'
+
+// This forces Sinopia server to use fixtures
+jest.spyOn(Config, 'useResourceTemplateFixtures', 'get').mockReturnValue(true)
 
 describe('fetchResourceTemplate', () => {
   describe('a valid template', () => {
@@ -93,5 +97,22 @@ describe('fetchResourceTemplateSummaries', () => {
     expect(server.listResourcesInGroupContainer).toHaveBeenCalledTimes(1)
     expect(server.listResourcesInGroupContainer).toHaveBeenCalledWith('ld4p')
     expect(dispatch).toHaveBeenCalledTimes(0)
+  })
+  it('handles a connection error', async () => {
+    const resourceTemplateId = 'list of resource templates'
+    // const resourceTemplatesResponse = { response: {} }
+
+    server.listResourcesInGroupContainer = jest.fn().mockRejectedValue('Error: Request has been terminated..., etc.')
+    const dispatch = jest.fn()
+
+    await fetchResourceTemplateSummaries()(dispatch)
+
+    expect(dispatch).toBeCalledWith({
+      type: 'RETRIEVE_RESOURCE_TEMPLATE_ERROR',
+      payload: {
+        resourceTemplateId,
+        reason: 'Error: Request has been terminated..., etc.',
+      },
+    })
   })
 })

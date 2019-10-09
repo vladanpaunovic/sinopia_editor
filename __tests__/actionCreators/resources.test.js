@@ -16,7 +16,11 @@ import * as resourceTemplateThunks from 'actionCreators/resourceTemplates'
 jest.mock('sinopiaServer')
 
 const mockStore = configureMockStore([thunk])
-shortid.generate = jest.fn().mockReturnValue('abc123')
+
+beforeEach(() => {
+  shortid.generate = jest.fn().mockReturnValueOnce('abc123').mockReturnValueOnce('def456')
+    .mockReturnValue('ghi789')
+})
 
 const state = {
   selectorReducer: {
@@ -74,7 +78,7 @@ describe('retrieveResource', () => {
     it('it does not dispatch setLastSaveChecksum', async () => {
       resourceTemplateThunks.fetchResourceTemplate = jest.fn().mockResolvedValue(undefined)
 
-      await store.dispatch(retrieveResource(currentUser, uri))
+      expect(await store.dispatch(retrieveResource(currentUser, uri))).toBe(false)
 
       const actions = store.getActions()
       expect(actions.length).toEqual(1)
@@ -89,7 +93,7 @@ describe('retrieveResource', () => {
       const resourceTemplate = templateResponse.response.body
       resourceTemplateThunks.fetchResourceTemplate = jest.fn().mockResolvedValue(resourceTemplate)
 
-      await store.dispatch(retrieveResource(currentUser, uri))
+      expect(await store.dispatch(retrieveResource(currentUser, uri))).toBe(true)
 
       const actions = store.getActions()
       const expectedResource = {
@@ -115,6 +119,27 @@ describe('retrieveResource', () => {
         { type: 'SET_LAST_SAVE_CHECKSUM', payload: undefined },
         { type: 'SET_LAST_SAVE_CHECKSUM', payload: 'f767b63c3e1d1af6f8c136b15a31a1e0' },
         { type: 'SET_UNUSED_RDF', payload: '' },
+      ])
+    })
+  })
+  describe('when an error is raised', () => {
+    const store = mockStore(state)
+    it('it dispatches retrieve resource error', async () => {
+      resourceTemplateThunks.fetchResourceTemplate = jest.fn().mockRejectedValue(new Error('Ooops'))
+
+      expect(await store.dispatch(retrieveResource(currentUser, uri))).toBe(false)
+
+      const actions = store.getActions()
+      expect(actions.length).toEqual(2)
+      expect(actions).toEqual([
+        { type: 'RETRIEVE_RESOURCE_STARTED' },
+        {
+          type: 'RETRIEVE_RESOURCE_ERROR',
+          payload: {
+            reason: 'Error: Ooops',
+            uri: 'http://sinopia.io/repository/stanford/123',
+          },
+        },
       ])
     })
   })
@@ -297,7 +322,7 @@ describe('stubResourceProperties', () => {
     })
     it('stubs properties with defaults', () => {
       // Carrier type
-      const item = resource['http://id.loc.gov/ontologies/bibframe/carrier'].items.abc123
+      const item = resource['http://id.loc.gov/ontologies/bibframe/carrier'].items.ghi789
       expect(item.label).toEqual('volume')
       expect(item.uri).toEqual('http://id.loc.gov/vocabulary/carriers/nc')
       expect(findToggleCollapse(dispatch.mock.calls, [
@@ -309,6 +334,96 @@ describe('stubResourceProperties', () => {
     it('does not stub other properties with defaults', () => {
       // Item information
       expect(resource['http://id.loc.gov/ontologies/bibframe/itemPortion']).toEqual({})
+    })
+  })
+  describe('resource with multiple value template refs', () => {
+    let dispatch
+    beforeEach(async () => {
+      dispatch = jest.fn()
+    })
+    it('stubs each of the values template refs when no existing value', async () => {
+      const existingResource = { 'http://id.loc.gov/ontologies/bibframe/Identifier': {} }
+      const [resource] = await stubResourceProperties('test:RT:bf2:Identifiers', {}, existingResource, ['resource'], true, false, 'http://id.loc.gov/ontologies/bibframe/Identifier', dispatch)
+      expect(resource).toEqual({
+        'http://id.loc.gov/ontologies/bibframe/Identifier': {
+          abc123: {
+            'ld4p:RT:bf2:Identifiers:Copyright': {
+              'http://id.loc.gov/ontologies/bibframe/note': {},
+              'http://id.loc.gov/ontologies/bibframe/source': {},
+              'http://www.w3.org/1999/02/22-rdf-syntax-ns#value': {},
+            },
+          },
+          def456: {
+            'ld4p:RT:bf2:Identifiers:ISBN': {
+              'http://id.loc.gov/ontologies/bibframe/note': {},
+              'http://id.loc.gov/ontologies/bibframe/qualifier': {},
+              'http://id.loc.gov/ontologies/bibframe/status': {},
+              'http://www.w3.org/1999/02/22-rdf-syntax-ns#value': {},
+            },
+          },
+          ghi789: {
+            'ld4p:RT:bf2:Identifiers:EAN': {
+              'http://id.loc.gov/ontologies/bibframe/note': {},
+              'http://id.loc.gov/ontologies/bibframe/qualifier': {},
+              'http://www.w3.org/1999/02/22-rdf-syntax-ns#value': {},
+            },
+          },
+        },
+      })
+    })
+    it('stubs each of the values template refs when one has an existing value', async () => {
+      const existingResource = {
+        'http://id.loc.gov/ontologies/bibframe/Identifier': {
+          xViwLfpI7: {
+            'ld4p:RT:bf2:Identifiers:Copyright': {
+              'http://www.w3.org/1999/02/22-rdf-syntax-ns#value': {
+                items: {
+                  'gZHIw-NM': {
+                    content: '123456789',
+                    label: '123456789',
+                    lang: 'en',
+                  },
+                },
+              },
+            },
+          },
+        },
+      }
+      const [resource] = await stubResourceProperties('test:RT:bf2:Identifiers', {}, existingResource, ['resource'], false, false, false, dispatch)
+      expect(resource).toEqual({
+        'http://id.loc.gov/ontologies/bibframe/Identifier': {
+          xViwLfpI7: {
+            'ld4p:RT:bf2:Identifiers:Copyright': {
+              'http://www.w3.org/1999/02/22-rdf-syntax-ns#value': {
+                items: {
+                  'gZHIw-NM': {
+                    content: '123456789',
+                    label: '123456789',
+                    lang: 'en',
+                  },
+                },
+              },
+              'http://id.loc.gov/ontologies/bibframe/source': {},
+              'http://id.loc.gov/ontologies/bibframe/note': {},
+            },
+          },
+          def456: {
+            'ld4p:RT:bf2:Identifiers:ISBN': {
+              'http://www.w3.org/1999/02/22-rdf-syntax-ns#value': {},
+              'http://id.loc.gov/ontologies/bibframe/qualifier': {},
+              'http://id.loc.gov/ontologies/bibframe/note': {},
+              'http://id.loc.gov/ontologies/bibframe/status': {},
+            },
+          },
+          ghi789: {
+            'ld4p:RT:bf2:Identifiers:EAN': {
+              'http://www.w3.org/1999/02/22-rdf-syntax-ns#value': {},
+              'http://id.loc.gov/ontologies/bibframe/qualifier': {},
+              'http://id.loc.gov/ontologies/bibframe/note': {},
+            },
+          },
+        },
+      })
     })
   })
   describe('resource with existing values', () => {
@@ -374,7 +489,7 @@ describe('stubResourceProperties', () => {
           'resourceTemplate:bf2:Identifiers:Barcode': {
             'http://www.w3.org/1999/02/22-rdf-syntax-ns#value': {
               items: {
-                abc123: {
+                def456: {
                   content: '12345',
                   lang: 'en',
                 },
