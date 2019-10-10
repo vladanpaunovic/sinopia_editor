@@ -24,6 +24,8 @@ const QASearchResults = (props) => {
 
   const [error, setError] = useState(null)
   const [resourceURI, setResourceURI] = useState(null)
+  // Resource ID is for handling non-LD QA authorities, e.g., Discog
+  const [resourceId, setResourceId] = useState(null)
   const [resourceTemplateId, setResourceTemplateId] = useState(null)
   const [resourceN3, setResourceN3] = useState(null)
   const [resourceState, unusedDataset, useResourceError] = useResource(resourceN3, resourceURI, resourceTemplateId, rootResource, props.history)
@@ -44,26 +46,39 @@ const QASearchResults = (props) => {
     if (!resourceURI || !searchUri) {
       return
     }
-    getTerm(resourceURI, searchUri)
+    getTerm(resourceURI, resourceId, searchUri)
       .then(resourceN3 => setResourceN3(resourceN3))
       .catch(err => setError(`Error retrieving resource: ${err.toString()}`))
   }, [resourceURI, searchUri])
 
   // Transform the results into the format to be displayed in the table.
   const tableData = useMemo(() => searchResults.map((result) => {
-    const classContext = result.context.find(context => context.property === 'Type')
-    const classes = classContext ? classContext.values : []
+    // Discogs returns a context that is not an array
+    console.log('result', result)
+    const types = []
+    if(result.context) {
+      if(Array.isArray(result.context)) {
+          const classContext = result.context.find(context => context.property === 'Type')
+          if (classContext) {
+              types.push(...classContext.values)
+          }
+      } else if (Array.isArray(result.context.Type)) {
+        types.push(...result.context.Type)
+      }
+    }
 
     return {
       label: result.label,
       uri: result.uri,
-      classes,
+      id: result.id,
+      types,
     }
   }),
   [searchResults])
 
-  const handleCopy = (uri) => {
+  const handleCopy = (uri, id) => {
     setResourceURI(uri)
+    setResourceId(id)
     setResourceTemplateId(null)
     showResourceTemplateChooser()
   }
@@ -81,12 +96,12 @@ const QASearchResults = (props) => {
     )
   }
 
-  function actionFormatter(cell) {
+  function actionFormatter(cell, row) {
     return (
       <div>
         <button type="button"
                 className="btn btn-link"
-                onClick={() => handleCopy(cell)}
+                onClick={() => handleCopy(cell, row.id)}
                 title="Copy"
                 aria-label="Copy this resource">
           <FontAwesomeIcon icon={faCopy} size="2x" />
@@ -103,8 +118,8 @@ const QASearchResults = (props) => {
       headerStyle: { backgroundColor: '#F8F6EF', width: '45%' },
     },
     {
-      dataField: 'classes',
-      text: 'Classes',
+      dataField: 'types',
+      text: 'Types',
       sort: false,
       headerStyle: { backgroundColor: '#F8F6EF', width: '40%' },
       formatter: classFormatter,
