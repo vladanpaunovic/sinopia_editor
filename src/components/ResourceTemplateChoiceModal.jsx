@@ -43,7 +43,7 @@ const ResourceTemplateChoiceModal = (props) => {
   }
 
   const modal = (
-    <div className="{ classes.join(' ') }"
+    <div className={ classes.join(' ') }
          tabIndex="-1"
          role="dialog"
          id="choose-rt" style={{ display }}>

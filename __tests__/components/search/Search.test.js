@@ -3,7 +3,7 @@ import React from 'react'
 import { fireEvent } from '@testing-library/react'
 import Search from 'components/search/Search'
 // eslint-disable-next-line import/no-unresolved
-import { renderWithRedux, createReduxStore } from 'testUtils'
+import { renderWithRedux, createReduxStore, setupModal } from 'testUtils'
 import { MemoryRouter } from 'react-router-dom'
 import * as sinopiaServer from 'sinopiaServer'
 import Swagger from 'swagger-client'
@@ -12,6 +12,8 @@ jest.mock('swagger-client')
 
 
 describe('<Search />', () => {
+  setupModal()
+
   const createInitialState = () => {
     return {
       selectorReducer: {
@@ -89,7 +91,7 @@ describe('<Search />', () => {
 
     // Select an authority
     fireEvent.change(getByDisplayValue('Sinopia'), { target: { value: 'urn:ld4p:qa:sharevde_stanford_ld4l_cache:all' } })
-    // debug()
+
     expect(getByText('SHAREVDE STANFORD')).toBeInTheDocument()
 
     // Enter a query

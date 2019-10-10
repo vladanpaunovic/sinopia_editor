@@ -5,7 +5,7 @@ import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
 import PropTypes from 'prop-types'
 import Config from 'Config'
-import { closeGroupChooser, hideModal } from 'actions/index'
+import { hideModal } from 'actions/index'
 import { getCurrentUser } from 'authSelectors'
 import { publishResource } from 'actionCreators/resources'
 import ModalWrapper from './ModalWrapper'
@@ -104,6 +104,6 @@ const mapStateToProps = state => ({
   currentUser: getCurrentUser(state),
 })
 
-const mapDispatchToProps = dispatch => bindActionCreators({ closeGroupChooser, publishResource, hideModal }, dispatch)
+const mapDispatchToProps = dispatch => bindActionCreators({ publishResource, hideModal }, dispatch)
 
 export default connect(mapStateToProps, mapDispatchToProps)(GroupChoiceModal)

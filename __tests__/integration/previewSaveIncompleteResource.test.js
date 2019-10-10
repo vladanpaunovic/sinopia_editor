@@ -1,5 +1,5 @@
 import React from 'react'
-import { fireEvent } from '@testing-library/react'
+import { fireEvent, wait } from '@testing-library/react'
 // eslint-disable-next-line import/no-unresolved
 import { renderWithRedux, createReduxStore, setupModal } from 'testUtils'
 import App from 'components/App'
@@ -89,7 +89,7 @@ describe('Preview and try to save resource', () => {
   const store = createReduxStore(createInitialState())
   setupModal()
   const {
-    getByText, getByTitle, queryByText, queryAllByText, getByTestId, debug,
+    getByText, getByTitle, getByTestId, queryAllByText, queryByText,
   } = renderWithRedux(
     (<MemoryRouter><App /></MemoryRouter>), store,
   )
@@ -105,9 +105,13 @@ describe('Preview and try to save resource', () => {
     expect(groupChoiceModal.classList.contains('show')).not.toBe(true)
 
     // Preview the RDF
-    fireEvent.click(getByTitle('Preview RDF'))
-    debug(getByTitle('Preview RDF'))
-    expect(rdfModal.classList.contains('show')).toBe(true)
+    const previewBtn = getByTitle('Preview RDF')
+
+    fireEvent.click(previewBtn)
+    await wait(() => {
+      expect(rdfModal.classList.contains('show')).toBe(true)
+    })
+
     expect(getByText(/<> <http:\/\/sinopia.io\/vocabulary\/hasResourceTemplate> "resourceTemplate:bf2:WorkTitle" ./)).toBeInTheDocument()
 
     // Save
@@ -117,9 +121,10 @@ describe('Preview and try to save resource', () => {
       return btn.id === 'modal-save'
     })
     fireEvent.click(saveAndPublish)
-
-    // All modals closed
-    expect(rdfModal.classList.contains('show')).not.toBe(true)
+    await wait(() => {
+      // All modals closed
+      expect(rdfModal.classList.contains('show')).not.toBe(true)
+    })
     expect(groupChoiceModal.classList.contains('show')).not.toBe(true)
     expect(queryByText(/There was a problem saving this resource/)).toBeInTheDocument()
     expect(queryByText('Required')).toBeInTheDocument()

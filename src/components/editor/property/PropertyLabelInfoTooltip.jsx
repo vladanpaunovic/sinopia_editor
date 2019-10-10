@@ -16,7 +16,7 @@ const PropertyLabelInfoTooltip = (props) => {
   )
 
   return (
-    <div trigger={['hover', 'focus']}
+    <div data-toggle="popover"
          data-placement="right"
          data-html="true"
          data-template={popover}

@@ -3,7 +3,9 @@ import { fireEvent, waitForElement, wait } from '@testing-library/react'
 import InputListLOC from 'components/editor/property/InputListLOC'
 import { showGroupChooser } from 'actions/index'
 /* eslint import/no-unresolved: 'off' */
-import { renderWithRedux, assertRDF, createReduxStore, setupModal } from 'testUtils'
+import {
+  renderWithRedux, assertRDF, createReduxStore, setupModal,
+} from 'testUtils'
 
 const createInitialState = (options = {}) => {
   const state = {

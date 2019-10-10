@@ -57,29 +57,29 @@ const SinopiaSearchResults = (props) => {
             </div>
           </div>
         </div>
-    }
-    <div id="search-results" className="row">
-      <div className="col-sm-2"></div>
-      <div className="col-sm-8">
-        <h3>Your List of Bibliographic Metadata Stored in Sinopia</h3>
-        <table className="table table-bordered" id="search-results-list">
-          <thead>
-            <tr>
-              <th className="sinopia" style={{ width: '5%' }}>
-                ID
-              </th>
-              <th className="sinopia" style={{ width: '95%' }}>
-                Title
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            { generateRows() }
-          </tbody>
-        </table>
+      }
+      <div id="search-results" className="row">
+        <div className="col-sm-2"></div>
+        <div className="col-sm-8">
+          <h3>Your List of Bibliographic Metadata Stored in Sinopia</h3>
+          <table className="table table-bordered" id="search-results-list">
+            <thead>
+              <tr>
+                <th className="sinopia" style={{ width: '5%' }}>
+                  ID
+                </th>
+                <th className="sinopia" style={{ width: '95%' }}>
+                  Title
+                </th>
+              </tr>
+            </thead>
+            <tbody>
+              { generateRows() }
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-[]  </React.Fragment>
+    </React.Fragment>
   )
 }
 

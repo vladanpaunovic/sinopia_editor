@@ -14,7 +14,7 @@ const SaveAndPublishButton = (props) => {
     if (props.isSaved) {
       props.update(props.currentUser)
     } else {
-      props.showGroupChooser()
+      props.showGroupChooser(true)
     }
   }
 
@@ -33,9 +33,9 @@ SaveAndPublishButton.propTypes = {
   id: PropTypes.string,
   isDisabled: PropTypes.bool,
   update: PropTypes.func,
-  showGroupChooser: PropTypes.func,
   isSaved: PropTypes.bool,
   currentUser: PropTypes.object,
+  showGroupChooser: PropTypes.func,
 }
 
 const mapStateToProps = state => ({

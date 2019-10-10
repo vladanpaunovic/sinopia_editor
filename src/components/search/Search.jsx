@@ -59,7 +59,7 @@ const Search = (props) => {
     }
   }
 
-  const options = searchConfig.map(config => (<option key={config.authority} value={config.authority}>{config.label}</option>))
+  const options = searchConfig.map(config => (<option key={config.uri} value={config.uri}>{config.label}</option>))
 
   let results
   if (searchUri === 'sinopia') {

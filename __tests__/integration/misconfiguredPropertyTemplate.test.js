@@ -53,8 +53,6 @@ const createInitialState = () => {
 
 describe('Loading a misconfigured property template', () => {
   setupModal()
-  sinopiaServer.getResourceTemplate.mockImplementation(getFixtureResourceTemplate)
-  sinopiaServer.listResourcesInGroupContainer.mockResolvedValue({ response: { body: { contains: ['Sinopia:RT:Fixture:LookupWithValueTemplateRefs'] } } })
   const store = createReduxStore(createInitialState())
   const app = (<MemoryRouter><App /></MemoryRouter>)
   const { getByText, findByText } = renderWithRedux(
