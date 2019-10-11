@@ -123,13 +123,13 @@ const QASearchResults = (props) => {
         <table className="table table-bordered">
           <thead>
             <tr>
-              <th className="sinopia" style={{ width: '45%' }}>
+              <th className="search-header" style={{ width: '45%' }}>
                 Label
               </th>
-              <th className="sinopia" style={{ width: '40%' }}>
+              <th className="search-header" style={{ width: '40%' }}>
                 Classes
               </th>
-              <th className="sinopia" style={{ width: '15%' }}/>
+              <th className="search-header" style={{ width: '15%' }}/>
             </tr>
           </thead>
           <tbody>
