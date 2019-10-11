@@ -31,6 +31,9 @@ describe('Config', () => {
     })
 
     it('useResourceTemplateFixtures is false by default', () => {
+      process.env = {
+        USE_FIXTURES: undefined,
+      }
       expect(Config.useResourceTemplateFixtures).toEqual(false)
     })
 
