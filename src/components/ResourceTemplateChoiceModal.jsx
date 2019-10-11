@@ -10,8 +10,8 @@ const ResourceTemplateChoiceModal = (props) => {
   const dispatch = useDispatch()
   /* eslint no-unused-vars: "off" */
   const closeResourceTemplateChooser = () => dispatch(closeResourceTemplateChooserAction())
+  const show = useSelector(state => state.selectorReducer.editor.modal === 'ResourceTemplateChoiceModal')
 
-  const show = useSelector(state => state.selectorReducer.editor.resourceTemplateChoice.show)
   const classes = ['modal', 'fade']
   let display = 'none'
 
@@ -37,7 +37,8 @@ const ResourceTemplateChoiceModal = (props) => {
     hideModal()
   }
 
-  const saveAndClose = () => {
+  const saveAndClose = (event) => {
+    event.preventDefault()
     props.choose(selectedValue)
     close()
   }
@@ -70,7 +71,7 @@ const ResourceTemplateChoiceModal = (props) => {
                 <button className="btn btn-link" style={{ paddingRight: '20px' }} onClick={ close }>
                   Cancel
                 </button>
-                <button className="btn btn-primary btn-sm" onClick={ saveAndClose }>
+                <button className="btn btn-primary btn-sm" onClick={event => saveAndClose(event) }>
                  Save
                 </button>
               </div>

@@ -3,7 +3,7 @@
 import React, { useMemo, useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import PropTypes from 'prop-types'
-import { showResourceTemplateChooser as showResourceTemplateChooserAction } from 'actions/index'
+import { showModal } from 'actions/index'
 import ResourceTemplateChoiceModal from '../ResourceTemplateChoiceModal'
 import { getTerm } from 'utilities/qa'
 import { existingResource as existingResourceAction } from 'actionCreators/resources'
@@ -14,7 +14,6 @@ import { faCopy } from '@fortawesome/free-solid-svg-icons'
 
 const QASearchResults = (props) => {
   const dispatch = useDispatch()
-  const showResourceTemplateChooser = () => dispatch(showResourceTemplateChooserAction())
 
   const searchResults = useSelector(state => state.selectorReducer.search.results)
   const searchUri = useSelector(state => state.selectorReducer.search.uri)
@@ -64,7 +63,7 @@ const QASearchResults = (props) => {
   const handleCopy = (uri) => {
     setResourceURI(uri)
     setResourceTemplateId(null)
-    showResourceTemplateChooser()
+    dispatch(showModal('ResourceTemplateChoiceModal'))
   }
 
   // Passed into resource template chooser to allow it to pass back selected resource template id.

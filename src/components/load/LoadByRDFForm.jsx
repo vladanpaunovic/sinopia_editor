@@ -54,7 +54,7 @@ const LoadByRDFForm = (props) => {
       try {
         setResourceTemplateId(builder.findRootResourceTemplateId())
       } catch (err) {
-        dispatch(showModal('GroupChoiceModal'))
+        dispatch(showModal('ResourceTemplateChoiceModal'))
       }
     }).catch(err => setError(`Error parsing: ${err}`))
     event.preventDefault()
