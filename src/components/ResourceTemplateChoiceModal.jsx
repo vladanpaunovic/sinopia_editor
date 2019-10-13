@@ -39,9 +39,17 @@ const ResourceTemplateChoiceModal = (props) => {
 
   const saveAndClose = (event) => {
     event.preventDefault()
-    props.choose(selectedValue)
+    const chooseResult = props.choose(selectedValue)
     close()
   }
+  const errors = useSelector((state) => {
+    if (state.selectorReducer.editor.errors.length > 0) {
+      return (<div className="alert alert-danger">
+        { state.selectorReducer.editor.errors.join(' ') }
+      </div>)
+    }
+    return ''
+  })
 
   const modal = (
     <div className={ classes.join(' ') }
@@ -58,6 +66,7 @@ const ResourceTemplateChoiceModal = (props) => {
           </div>
           <form className="group-select-options">
             <div className="modal-body group-panel">
+              { errors }
               <label className="group-select-label" htmlFor="resourceTemplateSelect">
               Into which resource template do you want to load this resource?
               </label>
